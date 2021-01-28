@@ -7,7 +7,7 @@ class PluginUpdaterService
     public function check_for_updates()
     {
         $updateChecker = \Puc_v4_Factory::buildUpdateChecker(
-            'https://bitbucket.org/webxl/archcommerce_woo_soft1_plugin',
+            'https://bitbucket.org/webxl/archcommerce_woo_soft1',
             ARCHCOMMERCE_PLUGIN_FULL_FILE,
             'archcommerce'
         );
