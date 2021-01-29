@@ -3,7 +3,7 @@ Contributors: dagmanolis
 Tags: woocommerce, softone, wpml
 Requires at least: 5.6
 Tested up to: 5.6
-Stable tag: 1.0.1
+Stable tag: 1.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,10 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 
 
 == Changelog ==
+
+= 1.2.0 =
+2021/01/29
+* feature: increase curl timeout
 
 = 1.0.1 =
 2021/01/28
