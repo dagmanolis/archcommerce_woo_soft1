@@ -56,6 +56,8 @@ class ArchCommerce
     {
         add_action('plugins_loaded', array($this->pluginUpdaterService, 'check_for_updates'));
         add_action('http_api_curl', array($this, 'http_api_curl'), 100, 1);
+        add_filter('http_request_timeout', array($this, 'custom_http_request_timeout'), 9999);
+        add_filter('http_request_args', array($this, 'custom_http_request_args'), 9999, 1);
         add_filter('cron_schedules', array($this, 'register_custom_interval'));
         add_action('updated_option', function ($option_name, $old_value, $new_value) {
             if ($option_name === "archcommerce_settings")
@@ -132,6 +134,15 @@ class ArchCommerce
     {
         curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 15);
         curl_setopt($handle, CURLOPT_TIMEOUT, 15);
+    }
+    public function custom_http_request_args($r)
+    {
+        $r['timeout'] = 15;
+        return $r;
+    }
+    public function custom_http_request_timeout($timeout_value)
+    {
+        return 15;
     }
     public function on_settings_option_updated($old_option, $new_option)
     {
