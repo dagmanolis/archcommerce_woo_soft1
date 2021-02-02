@@ -13,9 +13,18 @@ class DataOptionService
     {
         return isset($this->data["insert_orders_active"]) ? $this->data["insert_orders_active"] === true : false;
     }
+    public function is_customization_active()
+    {
+        return isset($this->data["customization_active"]) ? $this->data["customization_active"] === true : false;
+    }
     public function set_insert_orders_active(bool $is_active)
     {
         $this->data['insert_orders_active'] = $is_active;
+        $this->update();
+    }
+    public function set_customization_active(bool $is_active)
+    {
+        $this->data['customization_active'] = $is_active;
         $this->update();
     }
     public function get_token()

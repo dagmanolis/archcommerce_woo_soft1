@@ -61,7 +61,7 @@ if (!defined('ARCHCOMMERCE_SECRET_IV'))
     define('ARCHCOMMERCE_SECRET_IV', ARCHCOMMERCE_BITBUCKET_OAUTH_SECRET_KEY);
 
 if (!defined('ARCHCOMMERCE_SERVICE_URL'))
-    define('ARCHCOMMERCE_SERVICE_URL', 'https://archcommerce.webxl.gr');
+    define('ARCHCOMMERCE_SERVICE_URL', 'http://archcommerce.local:8080');
 
 require_once(plugin_dir_path(__FILE__) . 'php/services/contracts/IWooCommerceService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/abstracts/WooCommerceServiceBase.php');

@@ -21,6 +21,7 @@ class SubscriptionService
             $date->setTimezone(wp_timezone());
             $this->dataOptionService->set_subscription_expiration_date($date);
             $this->dataOptionService->set_insert_orders_active($subscription->insert_orders_active);
+            $this->dataOptionService->set_customization_active($subscription->customization_active);
         }
     }
     public function get_subscription_days_left()
@@ -51,6 +52,10 @@ class SubscriptionService
     public function is_insert_orders_active()
     {
         return $this->dataOptionService->is_insert_orders_active();
+    }
+    public function is_customization_active()
+    {
+        return $this->dataOptionService->is_customization_active();
     }
     private function get_subscription()
     {

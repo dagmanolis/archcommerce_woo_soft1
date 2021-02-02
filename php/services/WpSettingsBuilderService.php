@@ -35,6 +35,7 @@ class WpSettingsBuilderService
         $defaults = array(
             'token' => '',
             'insert_orders_active' => false,
+            'customization_active' => false,
             'subscription_expiration_date' => ""
         );
         add_option('archcommerce_data', $defaults);

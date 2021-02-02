@@ -16,11 +16,14 @@ class ArchCommerceApiService
         $this->requestService = $requestService;
         $this->settingsOptionService = $settingsOptionService;
     }
-    public function fetch_products(\DateTime $last_update_date)
+    public function fetch_products(\DateTime $last_update_date = null)
     {
-        $body = array(
-            "last_update_date" => $last_update_date->format("Y-m-d H:i:s")
-        );
+        if ($last_update_date)
+            $body = array(
+                "last_update_date" => $last_update_date->format("Y-m-d H:i:s")
+            );
+        else
+            $body = null;
         $url = "/api/v1.0/soft1/product";
         return $this->requestService->send_request($url, $body);
     }
