@@ -12,7 +12,7 @@ use webxl\archcommerce\services\PluginUpdaterService;
 use webxl\archcommerce\services\SettingsOptionService;
 use webxl\archcommerce\services\SubscriptionService;
 use webxl\archcommerce\services\ProductsSyncTablesService;
-use webxl\archcommerce\services\WpCronSchedulerService;
+use webxl\archcommerce\services\ProductsWpCronSchedulerService;
 
 class ArchCommerce
 {
@@ -21,7 +21,7 @@ class ArchCommerce
     private ProductsSyncProcessService $syncProcessService;
     private AjaxFunctionsService $ajaxFunctionsService;
     private ProductsSyncTablesService $productsSyncTablesService;
-    private WpCronSchedulerService $wpCronSchedulerService;
+    private ProductsWpCronSchedulerService $productsWpCronSchedulerService;
     private PluginUpdaterService $pluginUpdaterService;
     private IWooCommerceService $wooCommerceService;
     private SettingsOptionService $settingsOptionService;
@@ -33,7 +33,7 @@ class ArchCommerce
         ProductsSyncProcessService $syncProcessService,
         AjaxFunctionsService $ajaxFunctionsService,
         ProductsSyncTablesService $productsSyncTablesService,
-        WpCronSchedulerService $wpCronSchedulerService,
+        ProductsWpCronSchedulerService $productsWpCronSchedulerService,
         PluginUpdaterService $pluginUpdaterService,
         IWooCommerceService $wooCommerceService,
         SettingsOptionService $settingsOptionService,
@@ -45,7 +45,7 @@ class ArchCommerce
         $this->syncProcessService = $syncProcessService;
         $this->ajaxFunctionsService = $ajaxFunctionsService;
         $this->productsSyncTablesService = $productsSyncTablesService;
-        $this->wpCronSchedulerService = $wpCronSchedulerService;
+        $this->productsWpCronSchedulerService = $productsWpCronSchedulerService;
         $this->pluginUpdaterService = $pluginUpdaterService;
         $this->wooCommerceService = $wooCommerceService;
         $this->settingsOptionService = $settingsOptionService;
@@ -130,7 +130,7 @@ class ArchCommerce
                 );
             });
 
-        if ($this->wpCronSchedulerService->is_init_sync_process_unscheduled())
+        if ($this->productsWpCronSchedulerService->is_init_sync_process_unscheduled())
             add_action('admin_notices', function () {
                 $this->admin_notice(
                     "warning",
@@ -173,7 +173,7 @@ class ArchCommerce
             $new_option["cronjob_starting_time"] instanceof \DateTime &&
             $new_option["cronjob_starting_time"] !== $old_option["cronjob_starting_time"]
         )
-            $this->wpCronSchedulerService->schedule_init_sync_process($new_option["cronjob_starting_time"]);
+            $this->productsWpCronSchedulerService->schedule_init_sync_process($new_option["cronjob_starting_time"]);
     }
     public function on_sync_orders_settings_option_updated($old_option, $new_option)
     {
@@ -181,7 +181,7 @@ class ArchCommerce
     public function on_plugin_activated()
     {
         if ($this->WpSettingsBuilderService->options_exists()) {
-            $this->wpCronSchedulerService->schedule_init_sync_process();
+            $this->productsWpCronSchedulerService->schedule_init_sync_process();
         } else {
             $this->WpSettingsBuilderService->create_options();
         }
@@ -190,12 +190,12 @@ class ArchCommerce
     }
     public function on_plugin_deactivated()
     {
-        $this->wpCronSchedulerService->unschedule_process_sync_process();
-        $this->wpCronSchedulerService->unschedule_init_sync_process();
+        $this->productsWpCronSchedulerService->unschedule_process_sync_process();
+        $this->productsWpCronSchedulerService->unschedule_init_sync_process();
     }
     public function register_custom_interval($schedules)
     {
-        return $this->wpCronSchedulerService->register_custom_interval($schedules);
+        return $this->productsWpCronSchedulerService->register_custom_interval($schedules);
     }
     public function admin_enqueue_scripts($hook)
     {

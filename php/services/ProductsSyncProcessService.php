@@ -11,7 +11,7 @@ class ProductsSyncProcessService
     private IWooCommerceService $wooCommerceService;
     private ProductsSyncProcessOptionService $productsSyncProcessOptionService;
     private SyncProductsSettingsOptionService $syncProductsSettingsOptionService;
-    private WpCronSchedulerService $wpCronSchedulerService;
+    private ProductsWpCronSchedulerService $productsWpCronSchedulerService;
     private SubscriptionService $subscriptionService;
     public function __construct(
         ArchCommerceApiService $archApiService,
@@ -19,7 +19,7 @@ class ProductsSyncProcessService
         IWooCommerceService $wooCommerceService,
         ProductsSyncProcessOptionService $productsSyncProcessOptionService,
         SyncProductsSettingsOptionService $syncProductsSettingsOptionService,
-        WpCronSchedulerService $wpCronSchedulerService,
+        ProductsWpCronSchedulerService $productsWpCronSchedulerService,
         SubscriptionService $subscriptionService
     ) {
         $this->archApiService = $archApiService;
@@ -27,7 +27,7 @@ class ProductsSyncProcessService
         $this->wooCommerceService = $wooCommerceService;
         $this->productsSyncProcessOptionService = $productsSyncProcessOptionService;
         $this->syncProductsSettingsOptionService = $syncProductsSettingsOptionService;
-        $this->wpCronSchedulerService = $wpCronSchedulerService;
+        $this->productsWpCronSchedulerService = $productsWpCronSchedulerService;
         $this->subscriptionService = $subscriptionService;
     }
     public function init_sync_process()
@@ -49,7 +49,7 @@ class ProductsSyncProcessService
                         if (isset($body->success) && $body->success == true) {
                             $this->productsSyncProcessOptionService->complete_init_process(count($body->products), $batch_size);
                             $this->tableService->store_products($body->products, $this->syncProductsSettingsOptionService->get_storing_batch_size());
-                            $this->wpCronSchedulerService->schedule_process_sync_process();
+                            $this->productsWpCronSchedulerService->schedule_process_sync_process();
                             $this->productsSyncProcessOptionService->set_status_to_idle();
                         } else if (isset($body->success) && $body->success == false) {
                             $this->productsSyncProcessOptionService->finish_init_process_with_error();
@@ -87,7 +87,7 @@ class ProductsSyncProcessService
                     $this->productsSyncProcessOptionService->terminate_process();
                     $this->syncProductsSettingsOptionService->update_last_update_date();
                     $this->tableService->empty_table();
-                    $this->wpCronSchedulerService->unschedule_process_sync_process();
+                    $this->productsWpCronSchedulerService->unschedule_process_sync_process();
                 } else {
                     //process asp
                     $this->productsSyncProcessOptionService->set_status_to_processing();

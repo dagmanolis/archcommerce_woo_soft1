@@ -4,15 +4,15 @@ namespace webxl\archcommerce\services;
 
 class AjaxFunctionsService
 {
-    private WpCronSchedulerService $wpCronSchedulerService;
+    private ProductsWpCronSchedulerService $productsWpCronSchedulerService;
     private ProductsSyncTablesService $productsSyncTablesService;
     private ProductsSyncProcessOptionService $productsSyncProcessOptionService;
     public function __construct(
-        WpCronSchedulerService $wpCronSchedulerService,
+        ProductsWpCronSchedulerService $productsWpCronSchedulerService,
         ProductsSyncTablesService $productsSyncTablesService,
         ProductsSyncProcessOptionService $productsSyncProcessOptionService
     ) {
-        $this->wpCronSchedulerService = $wpCronSchedulerService;
+        $this->productsWpCronSchedulerService = $productsWpCronSchedulerService;
         $this->productsSyncTablesService = $productsSyncTablesService;
         $this->productsSyncProcessOptionService = $productsSyncProcessOptionService;
     }
@@ -29,7 +29,7 @@ class AjaxFunctionsService
     public function init_products_sync_process()
     {
         try {
-            $this->wpCronSchedulerService->fire_init_sync_process();
+            $this->productsWpCronSchedulerService->fire_init_sync_process();
             wp_send_json_success(null, 200);
         } catch (\Exception $ex) {
             error_log("Ajax init sync process failed: " . $ex->getMessage());
@@ -40,6 +40,6 @@ class AjaxFunctionsService
     {
         $this->productsSyncProcessOptionService->set_status_to_canceled();
         $this->productsSyncTablesService->empty_table();
-        $this->wpCronSchedulerService->unschedule_process_sync_process();
+        $this->productsWpCronSchedulerService->unschedule_process_sync_process();
     }
 }

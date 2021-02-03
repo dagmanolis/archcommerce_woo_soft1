@@ -4,7 +4,7 @@ namespace webxl\archcommerce\services;
 
 use DateInterval;
 
-class WpCronSchedulerService
+class ProductsWpCronSchedulerService
 {
     private SyncProductsSettingsOptionService $syncProductsSettingsOptionService;
     public function __construct(

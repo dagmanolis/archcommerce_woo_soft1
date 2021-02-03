@@ -34,7 +34,7 @@ use webxl\archcommerce\services\ProductsSyncProcessService;
 use webxl\archcommerce\services\ProductsSyncTablesService;
 use webxl\archcommerce\services\WooCommerceService;
 use webxl\archcommerce\services\WooCommerceWpmlService;
-use webxl\archcommerce\services\WpCronSchedulerService;
+use webxl\archcommerce\services\ProductsWpCronSchedulerService;
 use webxl\archcommerce\services\WpmlService;
 
 if (!defined('ARCHCOMMERCE_ADMIN_OPTIONS_PAGE_SLUG'))
@@ -73,7 +73,7 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/SettingsOptionService.php
 require_once(plugin_dir_path(__FILE__) . 'php/services/SyncProductsSettingsOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/DataOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncProcessOptionService.php');
-require_once(plugin_dir_path(__FILE__) . 'php/services/WpCronSchedulerService.php');
+require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsWpCronSchedulerService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/EncryptService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceRequestService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SubscriptionService.php');
@@ -124,7 +124,7 @@ else
         $archcommerce_orderProcessService
     );
 
-$archcommerce_wpCronSchedulerService = new WpCronSchedulerService($archcommerce_syncProductsSettingsOptionService);
+$archcommerce_productsWpCronSchedulerService = new ProductsWpCronSchedulerService($archcommerce_syncProductsSettingsOptionService);
 
 
 
@@ -132,7 +132,7 @@ $archcommerce_wpCronSchedulerService = new WpCronSchedulerService($archcommerce_
 $archcommerce_subscriptionService = new SubscriptionService($archcommerce_requestService, $archcommerce_dataOptionService);
 $archcommerce_settingsBuilderService = new WpSettingsBuilderService(
     $archcommerce_encryptService,
-    $archcommerce_wpCronSchedulerService,
+    $archcommerce_productsWpCronSchedulerService,
     $archcommerce_subscriptionService,
     $archcommerce_dataOptionService
 );
@@ -144,12 +144,12 @@ $archcommerce_syncProductsProcessService = new ProductsSyncProcessService(
     $archcommerce_wooCommerceService,
     $archcommerce_productsSyncProcessOptionService,
     $archcommerce_syncProductsSettingsOptionService,
-    $archcommerce_wpCronSchedulerService,
+    $archcommerce_productsWpCronSchedulerService,
     $archcommerce_subscriptionService
 );
 
 $archcommerce_ajaxFunctionsService = new AjaxFunctionsService(
-    $archcommerce_wpCronSchedulerService,
+    $archcommerce_productsWpCronSchedulerService,
     $archcommerce_productsSyncTablesService,
     $archcommerce_productsSyncProcessOptionService
 );
@@ -162,7 +162,7 @@ $archcommerce_arch = new ArchCommerce(
     $archcommerce_syncProductsProcessService,
     $archcommerce_ajaxFunctionsService,
     $archcommerce_productsSyncTablesService,
-    $archcommerce_wpCronSchedulerService,
+    $archcommerce_productsWpCronSchedulerService,
     $archcommerce_pluginUpdaterService,
     $archcommerce_wooCommerceService,
     $archcommerce_settingsOptionService,
