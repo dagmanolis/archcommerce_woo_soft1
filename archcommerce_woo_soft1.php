@@ -77,7 +77,6 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceRequestServic
 require_once(plugin_dir_path(__FILE__) . 'php/services/SubscriptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/CurrentMonthStatusService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/UpdatesHistoryService.php');
-require_once(plugin_dir_path(__FILE__) . 'php/services/BillingHistoryService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SyncProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceApiService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SyncTablesService.php');
