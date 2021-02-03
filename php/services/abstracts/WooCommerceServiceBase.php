@@ -46,11 +46,24 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
     }
     public function on_woocommerce_thankyou($order_id)
     {
-        $arch_order = $this->create_arch_order($order_id);
-        $response = $this->archCommerceApiService->insert_order($arch_order);
-        $response_code = intval(wp_remote_retrieve_response_code($response));
-        if ($response_code !== 200)
-            error_log("Error inserting order: " . print_r($response, true));
+        try {
+            $arch_order = $this->create_arch_order($order_id);
+            $response = $this->archCommerceApiService->insert_order($arch_order);
+            $response_code = intval(wp_remote_retrieve_response_code($response));
+            if ($response_code === 200) {
+                $body = json_decode(wp_remote_retrieve_body($response));
+                if ($body->success) {
+                    $data = $body->data;
+                    add_post_meta($order_id, '_archcommerce_soft1_id', $data->soft1_order_id, true);
+                } else {
+                    error_log("Error inserting order with id: " . $order_id . ". Response:"  . print_r($response, true));
+                }
+            } else {
+                error_log("Error inserting order with id: " . $order_id . ". Response:"  . print_r($response, true));
+            }
+        } catch (\Throwable $t) {
+            error_log("Error inserting order with id: " . $order_id . ". Error:"  . print_r($t, true));
+        }
     }
     protected function create_arch_order($order_id)
     {
