@@ -30,8 +30,8 @@ class WpAdminPagesService
         add_submenu_page($parent_slug,  $page_title,  $menu_title,  $capability,  $menu_slug, $page_render_function, $position);
 
         $page_title = __("ArchCommerce Products Sync", "archcommerce");
-        $menu_title = __("Products Sync", "archcommerce");
-        $menu_slug =  "archcommerce_admin_products_sync_subpage";
+        $menu_title = __("Sync products", "archcommerce");
+        $menu_slug =  "archcommerce_admin_sync_products_subpage";
         $capability =  'manage_options';
         $page_render_function = function () {
             $this->render_page("sync_products");
@@ -40,8 +40,8 @@ class WpAdminPagesService
         add_submenu_page($parent_slug,  $page_title,  $menu_title,  $capability,  $menu_slug, $page_render_function, $position);
 
         $page_title = __("ArchCommerce Orders Sync", "archcommerce");
-        $menu_title = __("Orders Sync", "archcommerce");
-        $menu_slug =  "archcommerce_admin_orders_sync_subpage";
+        $menu_title = __("Sync orders", "archcommerce");
+        $menu_slug =  "archcommerce_admin_sync_orders_subpage";
         $capability =  'manage_options';
         $page_render_function = function () {
             $this->render_page("sync_orders");

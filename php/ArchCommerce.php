@@ -188,17 +188,28 @@ class ArchCommerce
         if (strpos($hook, "archcommerce_page") !== false) {
             wp_enqueue_style("archcommerce_style", ARCHCOMMERCE_PLUGIN_URL . 'css/style.css', array(), '1.0.0');
         }
-        if (strpos($hook, "sync_process") !== false) {
-            wp_register_script("archcommerce_sync_process_script", ARCHCOMMERCE_PLUGIN_URL . 'js/sync_process.js', array('jquery'), '1.0.0');
+        if (strpos($hook, "sync_products") !== false) {
+            wp_register_script("archcommerce_sync_products_process_script", ARCHCOMMERCE_PLUGIN_URL . 'js/sync_products.js', array('jquery'), '1.0.0');
 
-            wp_localize_script('archcommerce_sync_process_script', 'wpobj', array(
+            wp_localize_script('archcommerce_sync_products_process_script', 'wpobj', array(
                 'ajaxurl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce("quote_wp_nonce"),
                 'areyousure_message' => __("Are you sure you want to start a sync process?", "archcommerce"),
                 'areyousure_cancel_message' => __("Are you sure you want to cancel this sync process?", "archcommerce")
             ));
 
-            wp_enqueue_script("archcommerce_sync_process_script");
+            wp_enqueue_script("archcommerce_sync_products_process_script");
+        } else if (strpos($hook, "sync_orders") !== false) {
+            wp_register_script("archcommerce_sync_orders_process_script", ARCHCOMMERCE_PLUGIN_URL . 'js/sync_orders.js', array('jquery'), '1.0.0');
+
+            wp_localize_script('archcommerce_sync_orders_process_script', 'wpobj', array(
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce("quote_wp_nonce"),
+                'areyousure_message' => __("Are you sure you want to start a sync process?", "archcommerce"),
+                'areyousure_cancel_message' => __("Are you sure you want to cancel this sync process?", "archcommerce")
+            ));
+
+            wp_enqueue_script("archcommerce_sync_orders_process_script");
         }
     }
     private function woocommerce_exists_and_active()
