@@ -2,7 +2,7 @@
 
 namespace webxl\archcommerce\services;
 
-class SyncProcessOptionService
+class ProductsSyncProcessOptionService
 {
     private $asp;
     public function __construct()
@@ -127,11 +127,11 @@ class SyncProcessOptionService
     }
     private function update()
     {
-        update_option("archcommerce_sync_process", $this->asp);
+        update_option("archcommerce_products_sync_process", $this->asp);
         $this->reload();
     }
     private function reload()
     {
-        $this->asp = get_option("archcommerce_sync_process");
+        $this->asp = get_option("archcommerce_products_sync_process");
     }
 }

@@ -6,20 +6,20 @@ class AjaxFunctionsService
 {
     private WpCronSchedulerService $wpCronSchedulerService;
     private ProductsSyncTablesService $productsSyncTablesService;
-    private SyncProcessOptionService $syncProcessOptionService;
+    private ProductsSyncProcessOptionService $productsSyncProcessOptionService;
     public function __construct(
         WpCronSchedulerService $wpCronSchedulerService,
         ProductsSyncTablesService $productsSyncTablesService,
-        SyncProcessOptionService $syncProcessOptionService
+        ProductsSyncProcessOptionService $productsSyncProcessOptionService
     ) {
         $this->wpCronSchedulerService = $wpCronSchedulerService;
         $this->productsSyncTablesService = $productsSyncTablesService;
-        $this->syncProcessOptionService = $syncProcessOptionService;
+        $this->productsSyncProcessOptionService = $productsSyncProcessOptionService;
     }
     public function get_active_products_sync_process()
     {
         try {
-            $asp = $this->syncProcessOptionService->get_asp();
+            $asp = $this->productsSyncProcessOptionService->get_asp();
             wp_send_json_success($asp, 200);
         } catch (\Exception $ex) {
             error_log("Ajax get active sync process failed: " . $ex->getMessage());
@@ -38,7 +38,7 @@ class AjaxFunctionsService
     }
     public function cancel_products_sync_process()
     {
-        $this->syncProcessOptionService->set_status_to_canceled();
+        $this->productsSyncProcessOptionService->set_status_to_canceled();
         $this->productsSyncTablesService->empty_table();
         $this->wpCronSchedulerService->unschedule_process_sync_process();
     }
