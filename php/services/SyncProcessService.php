@@ -47,6 +47,7 @@ class SyncProcessService
                     case 200:
                         $body = json_decode(wp_remote_retrieve_body($fetch_response));
                         if (isset($body->success) && $body->success == true) {
+                            $this->syncProcessOptionService->complete_init_process(count($body->products), $batch_size);
                             $this->tableService->store_products($body->products, $this->settingsOptionService->get_storing_batch_size());
                             $this->wpCronSchedulerService->schedule_process_sync_process();
                             $this->syncProcessOptionService->set_status_to_idle();
@@ -101,19 +102,5 @@ class SyncProcessService
             $this->syncProcessOptionService->set_status_to_failed();
             error_log("Process sync process failed: " . $ex->getMessage());
         }
-    }
-    private function merge_products_stock($products, $products_stock)
-    {
-    }
-    private function get_products_stock()
-    {
-        $response = $this->archApiService->fetch_products_stock();
-        $response_code = intval(wp_remote_retrieve_response_code($response));
-        if ($response_code === 200) {
-            $body = json_decode(wp_remote_retrieve_body($response));
-            if (isset($body->success) && $body->success == true)
-                return $body->products;
-        }
-        return null;
     }
 }
