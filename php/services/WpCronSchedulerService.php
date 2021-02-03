@@ -29,7 +29,7 @@ class WpCronSchedulerService
 
         if ($_starting_date) {
             $this->unschedule_init_sync_process();
-            wp_schedule_event($_starting_date->getTimestamp(), 'archcommerce_custom_interval', 'archcommerce_init_sync_process');
+            wp_schedule_event($_starting_date->getTimestamp(), 'archcommerce_sync_products_custom_interval', 'archcommerce_init_sync_process');
         }
     }
     public function unschedule_init_sync_process()
@@ -57,7 +57,7 @@ class WpCronSchedulerService
     {
         $cronjob_interval = $this->settingsOptionService->get_cronjob_custom_interval();
         if (isset($cronjob_interval) && !empty($cronjob_interval))
-            $schedules["archcommerce_custom_interval"] = array(
+            $schedules["archcommerce_sync_products_custom_interval"] = array(
                 'interval' => (int)$cronjob_interval,
                 'display'  => esc_html('ArchCommerce Custom Interval'),
             );
