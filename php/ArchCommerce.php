@@ -90,9 +90,9 @@ class ArchCommerce
                     add_action('admin_init', array($this->WpSettingsBuilderService, 'create_fields'), 40);
                     add_action('admin_menu', array($this->wpAdminPagesService, 'create_admin_menu'));
                     add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-                    add_action('wp_ajax_archcommerce_get_active_sync_process', array($this->ajaxFunctionsService, 'get_active_sync_process'));
-                    add_action('wp_ajax_archcommerce_init_sync_process', array($this->ajaxFunctionsService, 'init_sync_process'));
-                    add_action('wp_ajax_archcommerce_cancel_sync_process', array($this->ajaxFunctionsService, 'cancel_sync_process'));
+                    add_action('wp_ajax_archcommerce_get_active_products_sync_process', array($this->ajaxFunctionsService, 'get_active_products_sync_process'));
+                    add_action('wp_ajax_archcommerce_init_products_sync_process', array($this->ajaxFunctionsService, 'init_products_sync_process'));
+                    add_action('wp_ajax_archcommerce_cancel_products_sync_process', array($this->ajaxFunctionsService, 'cancel_products_sync_process'));
                 }
             } else {
                 add_action('admin_notices', function () {
