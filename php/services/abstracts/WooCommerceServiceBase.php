@@ -47,6 +47,9 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
     public function on_woocommerce_thankyou($order_id)
     {
         try {
+            //check if order has been inserted
+            if (!empty(get_post_meta($order_id, '_archcommerce_soft1_id', true)))
+                return;
             $arch_order = $this->create_arch_order($order_id);
             $response = $this->archCommerceApiService->insert_order($arch_order);
             $response_code = intval(wp_remote_retrieve_response_code($response));
