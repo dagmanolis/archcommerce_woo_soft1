@@ -17,8 +17,8 @@ class WpSettingsBuilderService
      ***********************/
     public function create_options()
     {
-        $now = \DateTime::createFromFormat("Y-m-d H:s:i", gmdate("Y-m-d H:s:i", time()));
-        $now->setTimezone(wp_timezone());
+
+
         $defaults = array(
             'email'  => '',
             'password' => '',
@@ -27,6 +27,8 @@ class WpSettingsBuilderService
         );
         add_option('archcommerce_settings', $defaults);
 
+        $now = \DateTime::createFromFormat("Y-m-d H:s:i", gmdate("Y-m-d H:s:i", time()));
+        $now->setTimezone(wp_timezone());
         $defaults = array(
             'updates_limit' => 0,
             'batch_size' => 100,
@@ -95,6 +97,22 @@ class WpSettingsBuilderService
                 'sanitize_callback' => array($this, 'sanitize_settings')
             )
         );
+        register_setting(
+            'archcommerce_settings_group',
+            'archcommerce_sync_products_settings',
+            array(
+                'type' => 'array',
+                'sanitize_callback' => array($this, 'sanitize_sync_products_settings')
+            )
+        );
+        register_setting(
+            'archcommerce_settings_group',
+            'archcommerce_sync_orders_settings',
+            array(
+                'type' => 'array',
+                'sanitize_callback' => array($this, 'sanitize_sync_orders_settings')
+            )
+        );
     }
 
     public function create_fields()
@@ -104,20 +122,20 @@ class WpSettingsBuilderService
             'archcommerce_connection_settings_section',
             __('Connection Settings', 'archcommerce'),
             array($this, 'render_connection_settings_section'),
-            'archcommerce_settings'
+            'archcommerce_settings_page'
         );
         add_settings_field(
             'email',
             __('email', 'archcommerce'),
             array($this, 'render_email'),
-            'archcommerce_settings',
+            'archcommerce_settings_page',
             'archcommerce_connection_settings_section'
         );
         add_settings_field(
             'password',
             __('password', 'archcommerce'),
             array($this, 'render_password'),
-            'archcommerce_settings',
+            'archcommerce_settings_page',
             'archcommerce_connection_settings_section'
         );
         //general settings
@@ -125,13 +143,13 @@ class WpSettingsBuilderService
             'archcommerce_general_settings_section',
             __('General Settings', 'archcommerce'),
             array($this, 'render_general_settings_section'),
-            'archcommerce_settings'
+            'archcommerce_settings_page'
         );
         add_settings_field(
-            'sync_orders',
-            __('Sync orders', 'archcommerce'),
-            array($this, 'render_sync_orders'),
-            'archcommerce_settings',
+            'sync_orders_realtime',
+            __('Sync orders in realtime', 'archcommerce'),
+            array($this, 'render_sync_orders_realtime'),
+            'archcommerce_settings_page',
             'archcommerce_general_settings_section'
         );
         //cronjob settings
@@ -139,20 +157,36 @@ class WpSettingsBuilderService
             'archcommerce_cronjob_settings_section',
             __('Cronjob Settings', 'archcommerce'),
             array($this, 'render_cronjob_settings_section'),
-            'archcommerce_settings'
+            'archcommerce_settings_page'
         );
+        //--products
         add_settings_field(
-            'cronjob_interval',
-            __('interval', 'archcommerce'),
-            array($this, 'render_cronjob_interval'),
-            'archcommerce_settings',
+            'sync_products_cronjob_interval',
+            __('sync products interval', 'archcommerce'),
+            array($this, 'render_sync_products_cronjob_interval'),
+            'archcommerce_settings_page',
             'archcommerce_cronjob_settings_section'
         );
         add_settings_field(
-            'cronjob_starting_time',
-            __('starting time', 'archcommerce'),
-            array($this, 'render_cronjob_starting_time'),
-            'archcommerce_settings',
+            'sync_products_cronjob_starting_time',
+            __('sync products starting time', 'archcommerce'),
+            array($this, 'render_sync_products_cronjob_starting_time'),
+            'archcommerce_settings_page',
+            'archcommerce_cronjob_settings_section'
+        );
+        //--orders
+        add_settings_field(
+            'sync_orders_cronjob_interval',
+            __('sync orders interval', 'archcommerce'),
+            array($this, 'render_sync_orders_cronjob_interval'),
+            'archcommerce_settings_page',
+            'archcommerce_cronjob_settings_section'
+        );
+        add_settings_field(
+            'sync_orders_cronjob_starting_time',
+            __('sync orders starting time', 'archcommerce'),
+            array($this, 'render_sync_orders_cronjob_starting_time'),
+            'archcommerce_settings_page',
             'archcommerce_cronjob_settings_section'
         );
         //advanced settings
@@ -160,27 +194,27 @@ class WpSettingsBuilderService
             'archcommerce_advanced_settings_section',
             __('Advanced Settings', 'archcommerce'),
             array($this, 'render_advanced_settings_section'),
-            'archcommerce_settings'
+            'archcommerce_settings_page'
         );
         add_settings_field(
             'batch_size',
-            __('update batch size', 'archcommerce'),
+            __('sync products update batch size', 'archcommerce'),
             array($this, 'render_batch_size'),
-            'archcommerce_settings',
+            'archcommerce_settings_page',
             'archcommerce_advanced_settings_section'
         );
         add_settings_field(
             'storing_batch_size',
-            __('storing batch size', 'archcommerce'),
+            __('sync products storing batch size', 'archcommerce'),
             array($this, 'render_storing_batch_size'),
-            'archcommerce_settings',
+            'archcommerce_settings_page',
             'archcommerce_advanced_settings_section'
         );
         add_settings_field(
             'last_update_date',
-            __('last update date', 'archcommerce'),
+            __('sync products last update date', 'archcommerce'),
             array($this, 'render_last_update_date'),
-            'archcommerce_settings',
+            'archcommerce_settings_page',
             'archcommerce_advanced_settings_section'
         );
     }
@@ -244,56 +278,73 @@ class WpSettingsBuilderService
         echo $options['password'];
         echo '">';
     }
-    public function render_sync_orders()
+    public function render_sync_orders_realtime()
     {
         $options = get_option('archcommerce_settings');
-        echo '<input type="checkbox" name="archcommerce_settings[sync_orders]" value="yes" ';
-        echo checked($options['sync_orders'], 'yes');
+        echo '<input type="checkbox" name="archcommerce_settings[sync_orders_realtime]" value="yes" ';
+        echo checked($options['sync_orders_realtime'], 'yes');
         echo '">';
     }
     public function render_batch_size()
     {
-        $options = get_option('archcommerce_settings');
-        echo '<input type="number" name="archcommerce_settings[batch_size]" value="';
+        $options = get_option('archcommerce_sync_products_settings');
+        echo '<input type="number" name="archcommerce_sync_products_settings[batch_size]" value="';
         echo $options['batch_size'];
         echo '">';
     }
     public function render_storing_batch_size()
     {
-        $options = get_option('archcommerce_settings');
-        echo '<input type="number" name="archcommerce_settings[storing_batch_size]" value="';
+        $options = get_option('archcommerce_sync_products_settings');
+        echo '<input type="number" name="archcommerce_sync_products_settings[storing_batch_size]" value="';
         echo $options['storing_batch_size'];
         echo '">';
     }
     public function render_last_update_date()
     {
-        $options = get_option('archcommerce_settings');
+        $options = get_option('archcommerce_sync_products_settings');
         $display = $options['last_update_date'];
-        echo '<input type="text" name="archcommerce_settings[last_update_date]" placeholder="';
+        echo '<input type="text" name="archcommerce_sync_products_settings[last_update_date]" placeholder="';
         _e("Y-m-d H:i:s", "archcommerce");
         echo '" value="';
         echo $options['last_update_date']->format("Y-m-d H:i:s");
         echo '">';
     }
-    public function render_cronjob_interval()
+    public function render_sync_products_cronjob_interval()
     {
-        $options = get_option('archcommerce_settings');
-        echo '<input type="number" name="archcommerce_settings[cronjob_interval]" placeholder="';
+        $options = get_option('archcommerce_sync_products_settings');
+        echo '<input type="number" name="archcommerce_sync_products_settings[cronjob_interval]" placeholder="';
         _e("enter time in seconds or daily/twicedaily", "archcommerce");
         echo '" value="';
         echo $options['cronjob_interval'];
         echo '">';
     }
-    public function render_cronjob_starting_time()
+    public function render_sync_products_cronjob_starting_time()
     {
-        $options = get_option('archcommerce_settings');
-        echo '<input type="text" name="archcommerce_settings[cronjob_starting_time]" placeholder="';
+        $options = get_option('archcommerce_sync_products_settings');
+        echo '<input type="text" name="archcommerce_sync_products_settings[cronjob_starting_time]" placeholder="';
         _e("Y-m-d H:i:s", "archcommerce");
         echo '" value="';
         echo empty($options['cronjob_starting_time']) ? "" : $options['cronjob_starting_time']->format("Y-m-d H:i:s");
         echo '">';
     }
-
+    public function render_sync_orders_cronjob_interval()
+    {
+        $options = get_option('archcommerce_sync_orders_settings');
+        echo '<input type="number" name="archcommerce_sync_orders_settings[cronjob_interval]" placeholder="';
+        _e("enter time in seconds or daily/twicedaily", "archcommerce");
+        echo '" value="';
+        echo $options['cronjob_interval'];
+        echo '">';
+    }
+    public function render_sync_orders_cronjob_starting_time()
+    {
+        $options = get_option('archcommerce_sync_orders_settings');
+        echo '<input type="text" name="archcommerce_sync_orders_settings[cronjob_starting_time]" placeholder="';
+        _e("Y-m-d H:i:s", "archcommerce");
+        echo '" value="';
+        echo empty($options['cronjob_starting_time']) ? "" : $options['cronjob_starting_time']->format("Y-m-d H:i:s");
+        echo '">';
+    }
 
 
     /**********************
@@ -302,14 +353,9 @@ class WpSettingsBuilderService
     public function sanitize_settings($new_option)
     {
         $old_option = get_option("archcommerce_settings");
-
         if (!isset($new_option['email']))  $new_option['email']  =  "";
         if (!isset($new_option['password'])) $new_option['password']  =  "";
-        if (!isset($new_option['batch_size']))  $new_option['batch_size']  =  100;
-        if (!isset($new_option['storing_batch_size']))  $new_option['storing_batch_size']  =  100;
-        if (!isset($new_option['cronjob_interval']))  $new_option['cronjob_interval']  =  "";
-        if (!isset($new_option['cronjob_starting_time']))  $new_option['cronjob_starting_time']  =  "";
-        if (!isset($new_option['sync_orders']))  $new_option['sync_orders']  =  false;
+        if (!isset($new_option['sync_orders_realtime']))  $new_option['sync_orders_realtime']  =  false;
         if (!isset($new_option['updates_limit']))  $new_option['updates_limit']  =  0;
 
         //password santization
@@ -320,6 +366,17 @@ class WpSettingsBuilderService
         if ($old_option["password"] !== $new_option["password"])
             $new_option['password']  = $this->encryptService->encrypt($new_option['password']);
 
+        return ($new_option);
+    }
+    public function sanitize_sync_products_settings($new_option)
+    {
+        $old_option = get_option("archcommerce_sync_products_settings");
+
+        if (!isset($new_option['batch_size']))  $new_option['batch_size']  =  100;
+        if (!isset($new_option['storing_batch_size']))  $new_option['storing_batch_size']  =  100;
+        if (!isset($new_option['cronjob_interval']))  $new_option['cronjob_interval']  =  "";
+        if (!isset($new_option['cronjob_starting_time']))  $new_option['cronjob_starting_time']  =  "";
+
         //last update date sanitization
         if ($old_option["last_update_date"] !== $new_option["last_update_date"]) {
             $last_update_date = \DateTime::createFromFormat("Y-m-d H:i:s", $new_option["last_update_date"], wp_timezone());
@@ -328,6 +385,23 @@ class WpSettingsBuilderService
             else
                 $new_option["last_update_date"] = $old_option["last_update_date"];
         }
+
+        //cronjob starting time sanitization
+        if ($old_option["cronjob_starting_time"] !== $new_option["cronjob_starting_time"]) {
+            $cron_starting_date = \DateTime::createFromFormat("Y-m-d H:i:s", $new_option["cronjob_starting_time"], wp_timezone());
+            if ($cron_starting_date)
+                $new_option["cronjob_starting_time"] = $cron_starting_date;
+            else
+                $new_option["cronjob_starting_time"] = $old_option["cronjob_starting_time"];
+        }
+
+        return ($new_option);
+    }
+    public function sanitize_sync_orders_settings($new_option)
+    {
+        $old_option = get_option("archcommerce_sync_orders_settings");
+        if (!isset($new_option['cronjob_interval']))  $new_option['cronjob_interval']  =  "";
+        if (!isset($new_option['cronjob_starting_time']))  $new_option['cronjob_starting_time']  =  "";
 
         //cronjob starting time sanitization
         if ($old_option["cronjob_starting_time"] !== $new_option["cronjob_starting_time"]) {

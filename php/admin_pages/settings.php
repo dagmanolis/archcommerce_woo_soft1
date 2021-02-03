@@ -5,7 +5,7 @@
     <form method="post" action="options.php">
         <?php
         settings_fields('archcommerce_settings_group');
-        do_settings_sections('archcommerce_settings');
+        do_settings_sections('archcommerce_settings_page');
         submit_button();
         ?>
     </form>

@@ -60,8 +60,17 @@ class ArchCommerce
         add_filter('http_request_args', array($this, 'custom_http_request_args'), 9999, 1);
         add_filter('cron_schedules', array($this, 'register_custom_interval'));
         add_action('updated_option', function ($option_name, $old_value, $new_value) {
-            if ($option_name === "archcommerce_settings")
-                $this->on_settings_option_updated($old_value, $new_value);
+            switch ($option_name) {
+                case "archcommerce_settings":
+                    $this->on_settings_option_updated($old_value, $new_value);
+                    break;
+                case "archcommerce_sync_products_settings":
+                    $this->on_sync_products_settings_option_updated($old_value, $new_value);
+                    break;
+                case "archcommerce_sync_orders_settings":
+                    $this->on_sync_orders_settings_option_updated($old_value, $new_value);
+                    break;
+            }
         }, 10, 3);
         //add_action('update_option_archcommerce_settings', array($this->WpSettingsBuilderService, 'on_update_option_archcommerce_settings'));
 
@@ -155,6 +164,9 @@ class ArchCommerce
             $this->dataOptionService->clear_token();
             $this->subscriptionService->refresh();
         }
+    }
+    public function on_sync_products_settings_option_updated($old_option, $new_option)
+    {
 
         //schedule init sync process cron job
         if (
@@ -162,6 +174,9 @@ class ArchCommerce
             $new_option["cronjob_starting_time"] !== $old_option["cronjob_starting_time"]
         )
             $this->wpCronSchedulerService->schedule_init_sync_process($new_option["cronjob_starting_time"]);
+    }
+    public function on_sync_orders_settings_option_updated($old_option, $new_option)
+    {
     }
     public function on_plugin_activated()
     {
