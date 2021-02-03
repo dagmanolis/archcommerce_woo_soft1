@@ -132,17 +132,17 @@ class ArchCommerce
     }
     public function http_api_curl($handle)
     {
-        curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($handle, CURLOPT_TIMEOUT, 15);
+        curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($handle, CURLOPT_TIMEOUT, 30);
     }
     public function custom_http_request_args($r)
     {
-        $r['timeout'] = 15;
+        $r['timeout'] = 30;
         return $r;
     }
     public function custom_http_request_timeout($timeout_value)
     {
-        return 15;
+        return 30;
     }
     public function on_settings_option_updated($old_option, $new_option)
     {
