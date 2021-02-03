@@ -67,9 +67,9 @@ class ArchCommerce
 
         if (defined('DOING_AJAX') && DOING_AJAX) {
             if (is_admin()) {
-                add_action('wp_ajax_archcommerce_get_active_sync_process', array($this->ajaxFunctionsService, 'get_active_sync_process'));
-                add_action('wp_ajax_archcommerce_init_sync_process', array($this->ajaxFunctionsService, 'init_sync_process'));
-                add_action('wp_ajax_archcommerce_cancel_sync_process', array($this->ajaxFunctionsService, 'cancel_sync_process'));
+                add_action('wp_ajax_archcommerce_get_active_products_sync_process', array($this->ajaxFunctionsService, 'get_active_products_sync_process'));
+                add_action('wp_ajax_archcommerce_init_products_sync_process', array($this->ajaxFunctionsService, 'init_products_sync_process'));
+                add_action('wp_ajax_archcommerce_cancel_products_sync_process', array($this->ajaxFunctionsService, 'cancel_products_sync_process'));
             }
         } else {
             if ($this->woocommerce_exists_and_active()) {

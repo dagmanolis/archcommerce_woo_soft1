@@ -16,7 +16,7 @@ class AjaxFunctionsService
         $this->syncTablesService = $syncTablesService;
         $this->syncProcessOptionService = $syncProcessOptionService;
     }
-    public function get_active_sync_process()
+    public function get_active_products_sync_process()
     {
         try {
             $asp = $this->syncProcessOptionService->get_asp();
@@ -26,7 +26,7 @@ class AjaxFunctionsService
             wp_send_json_error($ex->getMessage(), 500);
         }
     }
-    public function init_sync_process()
+    public function init_products_sync_process()
     {
         try {
             $this->wpCronSchedulerService->fire_init_sync_process();
@@ -36,7 +36,7 @@ class AjaxFunctionsService
             wp_send_json_error($ex->getMessage(), 500);
         }
     }
-    public function cancel_sync_process()
+    public function cancel_products_sync_process()
     {
         $this->syncProcessOptionService->set_status_to_canceled();
         $this->syncTablesService->empty_table();

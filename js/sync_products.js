@@ -10,7 +10,7 @@ jQuery(function ($) {
             url: wpobj.ajaxurl,
             type: "POST",
             data: {
-                action: "archcommerce_get_active_sync_process",
+                action: "archcommerce_get_active_products_sync_process",
                 security: wpobj.nonce,
             },
             success: function (response) {
@@ -33,7 +33,7 @@ jQuery(function ($) {
             url: wpobj.ajaxurl,
             type: "POST",
             data: {
-                action: "archcommerce_init_sync_process",
+                action: "archcommerce_init_products_sync_process",
                 security: wpobj.nonce,
             },
             success: function (response) {
@@ -57,7 +57,7 @@ jQuery(function ($) {
             url: wpobj.ajaxurl,
             type: "POST",
             data: {
-                action: "archcommerce_cancel_sync_process",
+                action: "archcommerce_cancel_products_sync_process",
                 security: wpobj.nonce,
             }
         });
