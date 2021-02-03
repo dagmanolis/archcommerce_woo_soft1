@@ -6,18 +6,18 @@ use DateInterval;
 
 class WpCronSchedulerService
 {
-    private SettingsOptionService $settingsOptionService;
+    private SyncProductsSettingsOptionService $syncProductsSettingsOptionService;
     public function __construct(
-        SettingsOptionService $settingsOptionService
+        SyncProductsSettingsOptionService $syncProductsSettingsOptionService
     ) {
-        $this->settingsOptionService = $settingsOptionService;
+        $this->syncProductsSettingsOptionService = $syncProductsSettingsOptionService;
     }
     public function schedule_init_sync_process(\DateTime $starting_date = null)
     {
         if ($starting_date) {
             $_starting_date = $starting_date;
         } else {
-            $_starting_date =  $this->settingsOptionService->get_cronjob_starting_time();
+            $_starting_date =  $this->syncProductsSettingsOptionService->get_cronjob_starting_time();
         }
 
         $now = \DateTime::createFromFormat("Y-m-d H:i:s", gmdate("Y-m-d H:i:s", time()));
@@ -55,7 +55,7 @@ class WpCronSchedulerService
     }
     public function register_custom_interval($schedules)
     {
-        $cronjob_interval = $this->settingsOptionService->get_cronjob_custom_interval();
+        $cronjob_interval = $this->syncProductsSettingsOptionService->get_cronjob_custom_interval();
         if (isset($cronjob_interval) && !empty($cronjob_interval))
             $schedules["archcommerce_sync_products_custom_interval"] = array(
                 'interval' => (int)$cronjob_interval,

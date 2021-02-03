@@ -77,11 +77,10 @@ class ArchCommerce
                 register_deactivation_hook(ARCHCOMMERCE_PLUGIN_FULL_FILE, array($this, 'on_plugin_deactivated'));
                 add_action("archcommerce_init_sync_process", array($this->syncProcessService, "init_sync_process"));
                 add_action("archcommerce_process_sync_process", array($this->syncProcessService, "process_sync_process"));
-
                 register_uninstall_hook(__FILE__, 'delete_table');
                 if (
                     $this->subscriptionService->is_insert_orders_active() &&
-                    $this->settingsOptionService->has_sync_orders_enabled()
+                    $this->settingsOptionService->has_sync_orders_realtime_enabled()
                 )
                     add_action('woocommerce_thankyou', array($this->wooCommerceService, 'on_woocommerce_thankyou'));
                 if (is_admin()) {

@@ -10,7 +10,7 @@ class ProductsSyncProcessService
     private ProductsSyncTablesService $tableService;
     private IWooCommerceService $wooCommerceService;
     private ProductsSyncProcessOptionService $productsSyncProcessOptionService;
-    private SettingsOptionService $settingsOptionService;
+    private SyncProductsSettingsOptionService $syncProductsSettingsOptionService;
     private WpCronSchedulerService $wpCronSchedulerService;
     private SubscriptionService $subscriptionService;
     public function __construct(
@@ -18,7 +18,7 @@ class ProductsSyncProcessService
         ProductsSyncTablesService $tableService,
         IWooCommerceService $wooCommerceService,
         ProductsSyncProcessOptionService $productsSyncProcessOptionService,
-        SettingsOptionService $settingsOptionService,
+        SyncProductsSettingsOptionService $syncProductsSettingsOptionService,
         WpCronSchedulerService $wpCronSchedulerService,
         SubscriptionService $subscriptionService
     ) {
@@ -26,7 +26,7 @@ class ProductsSyncProcessService
         $this->tableService = $tableService;
         $this->wooCommerceService = $wooCommerceService;
         $this->productsSyncProcessOptionService = $productsSyncProcessOptionService;
-        $this->settingsOptionService = $settingsOptionService;
+        $this->syncProductsSettingsOptionService = $syncProductsSettingsOptionService;
         $this->wpCronSchedulerService = $wpCronSchedulerService;
         $this->subscriptionService = $subscriptionService;
     }
@@ -36,10 +36,10 @@ class ProductsSyncProcessService
             if ($this->subscriptionService->get_subscription_status() !== "active")
                 return;
             if ($this->productsSyncProcessOptionService->is_status_ready_for_init()) {
-                $batch_size = $this->settingsOptionService->get_batch_size();
+                $batch_size = $this->syncProductsSettingsOptionService->get_batch_size();
                 $this->productsSyncProcessOptionService->init_sync_process($batch_size);
                 if ($this->subscriptionService->is_customization_active())
-                    $fetch_response = $this->archApiService->fetch_products($this->settingsOptionService->get_last_update_date());
+                    $fetch_response = $this->archApiService->fetch_products($this->syncProductsSettingsOptionService->get_last_update_date());
                 else
                     $fetch_response = $this->archApiService->fetch_products();
                 $response_code = intval(wp_remote_retrieve_response_code($fetch_response));
@@ -48,7 +48,7 @@ class ProductsSyncProcessService
                         $body = json_decode(wp_remote_retrieve_body($fetch_response));
                         if (isset($body->success) && $body->success == true) {
                             $this->productsSyncProcessOptionService->complete_init_process(count($body->products), $batch_size);
-                            $this->tableService->store_products($body->products, $this->settingsOptionService->get_storing_batch_size());
+                            $this->tableService->store_products($body->products, $this->syncProductsSettingsOptionService->get_storing_batch_size());
                             $this->wpCronSchedulerService->schedule_process_sync_process();
                             $this->productsSyncProcessOptionService->set_status_to_idle();
                         } else if (isset($body->success) && $body->success == false) {
@@ -61,7 +61,7 @@ class ProductsSyncProcessService
                     case 204:
                         //no products to update
                         $this->productsSyncProcessOptionService->finish_init_process_with_no_products_to_update();
-                        $this->settingsOptionService->update_last_update_date();
+                        $this->syncProductsSettingsOptionService->update_last_update_date();
                         break;
                     default:
                         $this->productsSyncProcessOptionService->finish_init_process_with_error();
@@ -85,7 +85,7 @@ class ProductsSyncProcessService
                 if ($offset >= $total_products) {
                     //terminate asp
                     $this->productsSyncProcessOptionService->terminate_process();
-                    $this->settingsOptionService->update_last_update_date();
+                    $this->syncProductsSettingsOptionService->update_last_update_date();
                     $this->tableService->empty_table();
                     $this->wpCronSchedulerService->unschedule_process_sync_process();
                 } else {

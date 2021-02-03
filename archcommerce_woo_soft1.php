@@ -27,6 +27,7 @@ use webxl\archcommerce\services\EncryptService;
 use webxl\archcommerce\services\OrderProcessService;
 use webxl\archcommerce\services\PluginUpdaterService;
 use webxl\archcommerce\services\SettingsOptionService;
+use webxl\archcommerce\services\SyncProductsSettingsOptionService;
 use webxl\archcommerce\services\SubscriptionService;
 use webxl\archcommerce\services\ProductsSyncProcessOptionService;
 use webxl\archcommerce\services\ProductsSyncProcessService;
@@ -69,6 +70,7 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/WpAdminPagesService.php')
 require_once(plugin_dir_path(__FILE__) . 'php/services/OrderProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/WpSettingsBuilderService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SettingsOptionService.php');
+require_once(plugin_dir_path(__FILE__) . 'php/services/SyncProductsSettingsOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/DataOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncProcessOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/WpCronSchedulerService.php');
@@ -90,6 +92,7 @@ require_once(plugin_dir_path(__FILE__) . 'libs/plugin-update-checker/plugin-upda
 require_once(plugin_dir_path(__FILE__) . 'php/services/PluginUpdaterService.php');
 
 $archcommerce_settingsOptionService = new SettingsOptionService();
+$archcommerce_syncProductsSettingsOptionService = new SyncProductsSettingsOptionService();
 $archcommerce_dataOptionService = new DataOptionService();
 $archcommerce_productsSyncProcessOptionService = new ProductsSyncProcessOptionService();
 $archcommerce_encryptService = new EncryptService();
@@ -121,7 +124,7 @@ else
         $archcommerce_orderProcessService
     );
 
-$archcommerce_wpCronSchedulerService = new WpCronSchedulerService($archcommerce_settingsOptionService);
+$archcommerce_wpCronSchedulerService = new WpCronSchedulerService($archcommerce_syncProductsSettingsOptionService);
 
 
 
@@ -140,7 +143,7 @@ $archcommerce_syncProductsProcessService = new ProductsSyncProcessService(
     $archcommerce_productsSyncTablesService,
     $archcommerce_wooCommerceService,
     $archcommerce_productsSyncProcessOptionService,
-    $archcommerce_settingsOptionService,
+    $archcommerce_syncProductsSettingsOptionService,
     $archcommerce_wpCronSchedulerService,
     $archcommerce_subscriptionService
 );

@@ -23,14 +23,25 @@ class WpSettingsBuilderService
             'email'  => '',
             'password' => '',
             'updates_limit' => 0,
+            'sync_orders_realtime' => 'yes',
+        );
+        add_option('archcommerce_settings', $defaults);
+
+        $defaults = array(
+            'updates_limit' => 0,
             'batch_size' => 100,
             'cronjob_interval' => '',
             'cronjob_starting_time' => '',
             'last_update_date' => $now,
             'storing_batch_size' => 100,
-            'sync_orders' => 'yes'
         );
-        add_option('archcommerce_settings', $defaults);
+        add_option('archcommerce_sync_products_settings', $defaults);
+
+        $defaults = array(
+            'cronjob_interval' => '',
+            'cronjob_starting_time' => '',
+        );
+        add_option('archcommerce_sync_orders_settings', $defaults);
 
         $defaults = array(
             'token' => '',
