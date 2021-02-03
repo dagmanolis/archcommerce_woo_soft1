@@ -11,7 +11,7 @@ use webxl\archcommerce\services\DataOptionService;
 use webxl\archcommerce\services\PluginUpdaterService;
 use webxl\archcommerce\services\SettingsOptionService;
 use webxl\archcommerce\services\SubscriptionService;
-use webxl\archcommerce\services\SyncTablesService;
+use webxl\archcommerce\services\ProductsSyncTablesService;
 use webxl\archcommerce\services\WpCronSchedulerService;
 
 class ArchCommerce
@@ -20,7 +20,7 @@ class ArchCommerce
     private  WpSettingsBuilderService $WpSettingsBuilderService;
     private ProductsSyncProcessService $syncProcessService;
     private AjaxFunctionsService $ajaxFunctionsService;
-    private SyncTablesService $syncTablesService;
+    private ProductsSyncTablesService $productsSyncTablesService;
     private WpCronSchedulerService $wpCronSchedulerService;
     private PluginUpdaterService $pluginUpdaterService;
     private IWooCommerceService $wooCommerceService;
@@ -32,7 +32,7 @@ class ArchCommerce
         WpSettingsBuilderService $WpSettingsBuilderService,
         ProductsSyncProcessService $syncProcessService,
         AjaxFunctionsService $ajaxFunctionsService,
-        SyncTablesService $syncTablesService,
+        ProductsSyncTablesService $productsSyncTablesService,
         WpCronSchedulerService $wpCronSchedulerService,
         PluginUpdaterService $pluginUpdaterService,
         IWooCommerceService $wooCommerceService,
@@ -44,7 +44,7 @@ class ArchCommerce
         $this->WpSettingsBuilderService = $WpSettingsBuilderService;
         $this->syncProcessService = $syncProcessService;
         $this->ajaxFunctionsService = $ajaxFunctionsService;
-        $this->syncTablesService = $syncTablesService;
+        $this->productsSyncTablesService = $productsSyncTablesService;
         $this->wpCronSchedulerService = $wpCronSchedulerService;
         $this->pluginUpdaterService = $pluginUpdaterService;
         $this->wooCommerceService = $wooCommerceService;
@@ -172,7 +172,7 @@ class ArchCommerce
             $this->WpSettingsBuilderService->create_options();
         }
 
-        $this->syncTablesService->create_table();
+        $this->productsSyncTablesService->create_table();
     }
     public function on_plugin_deactivated()
     {
@@ -222,6 +222,6 @@ class ArchCommerce
     }
     public function delete_table()
     {
-        $this->syncTablesService->delete_table();
+        $this->productsSyncTablesService->delete_table();
     }
 }

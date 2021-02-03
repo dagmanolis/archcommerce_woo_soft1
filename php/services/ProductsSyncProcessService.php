@@ -7,7 +7,7 @@ use webxl\archcommerce\services\contracts\IWooCommerceService;
 class ProductsSyncProcessService
 {
     private ArchCommerceApiService $archApiService;
-    private SyncTablesService $tableService;
+    private ProductsSyncTablesService $tableService;
     private IWooCommerceService $wooCommerceService;
     private SyncProcessOptionService $syncProcessOptionService;
     private SettingsOptionService $settingsOptionService;
@@ -15,7 +15,7 @@ class ProductsSyncProcessService
     private SubscriptionService $subscriptionService;
     public function __construct(
         ArchCommerceApiService $archApiService,
-        SyncTablesService $tableService,
+        ProductsSyncTablesService $tableService,
         IWooCommerceService $wooCommerceService,
         SyncProcessOptionService $syncProcessOptionService,
         SettingsOptionService $settingsOptionService,

@@ -2,13 +2,13 @@
 
 namespace webxl\archcommerce\services;
 
-class SyncTablesService
+class ProductsSyncTablesService
 {
     private $table_name;
     public function __construct()
     {
         global $wpdb;
-        $this->table_name = $wpdb->prefix . 'archcommerce_sync_process';
+        $this->table_name = $wpdb->prefix . 'archcommerce_products_sync_process';
     }
 
 

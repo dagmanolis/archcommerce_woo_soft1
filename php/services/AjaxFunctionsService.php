@@ -5,15 +5,15 @@ namespace webxl\archcommerce\services;
 class AjaxFunctionsService
 {
     private WpCronSchedulerService $wpCronSchedulerService;
-    private SyncTablesService $syncTablesService;
+    private ProductsSyncTablesService $productsSyncTablesService;
     private SyncProcessOptionService $syncProcessOptionService;
     public function __construct(
         WpCronSchedulerService $wpCronSchedulerService,
-        SyncTablesService $syncTablesService,
+        ProductsSyncTablesService $productsSyncTablesService,
         SyncProcessOptionService $syncProcessOptionService
     ) {
         $this->wpCronSchedulerService = $wpCronSchedulerService;
-        $this->syncTablesService = $syncTablesService;
+        $this->productsSyncTablesService = $productsSyncTablesService;
         $this->syncProcessOptionService = $syncProcessOptionService;
     }
     public function get_active_products_sync_process()
@@ -39,7 +39,7 @@ class AjaxFunctionsService
     public function cancel_products_sync_process()
     {
         $this->syncProcessOptionService->set_status_to_canceled();
-        $this->syncTablesService->empty_table();
+        $this->productsSyncTablesService->empty_table();
         $this->wpCronSchedulerService->unschedule_process_sync_process();
     }
 }

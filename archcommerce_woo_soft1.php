@@ -30,7 +30,7 @@ use webxl\archcommerce\services\SettingsOptionService;
 use webxl\archcommerce\services\SubscriptionService;
 use webxl\archcommerce\services\SyncProcessOptionService;
 use webxl\archcommerce\services\ProductsSyncProcessService;
-use webxl\archcommerce\services\SyncTablesService;
+use webxl\archcommerce\services\ProductsSyncTablesService;
 use webxl\archcommerce\services\WooCommerceService;
 use webxl\archcommerce\services\WooCommerceWpmlService;
 use webxl\archcommerce\services\WpCronSchedulerService;
@@ -79,7 +79,7 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/CurrentMonthStatusService
 require_once(plugin_dir_path(__FILE__) . 'php/services/UpdatesHistoryService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceApiService.php');
-require_once(plugin_dir_path(__FILE__) . 'php/services/SyncTablesService.php');
+require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncTablesService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/WooCommerceService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/WooCommerceWpmlService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/WpmlService.php');
@@ -133,11 +133,11 @@ $archcommerce_settingsBuilderService = new WpSettingsBuilderService(
     $archcommerce_subscriptionService,
     $archcommerce_dataOptionService
 );
-$archcommerce_syncTablesService = new SyncTablesService();
+$archcommerce_productsSyncTablesService = new ProductsSyncTablesService();
 
 $archcommerce_syncProductsProcessService = new ProductsSyncProcessService(
     $archcommerce_apiService,
-    $archcommerce_syncTablesService,
+    $archcommerce_productsSyncTablesService,
     $archcommerce_wooCommerceService,
     $archcommerce_syncProcessOptionService,
     $archcommerce_settingsOptionService,
@@ -147,7 +147,7 @@ $archcommerce_syncProductsProcessService = new ProductsSyncProcessService(
 
 $archcommerce_ajaxFunctionsService = new AjaxFunctionsService(
     $archcommerce_wpCronSchedulerService,
-    $archcommerce_syncTablesService,
+    $archcommerce_productsSyncTablesService,
     $archcommerce_syncProcessOptionService
 );
 
@@ -158,7 +158,7 @@ $archcommerce_arch = new ArchCommerce(
     $archcommerce_settingsBuilderService,
     $archcommerce_syncProductsProcessService,
     $archcommerce_ajaxFunctionsService,
-    $archcommerce_syncTablesService,
+    $archcommerce_productsSyncTablesService,
     $archcommerce_wpCronSchedulerService,
     $archcommerce_pluginUpdaterService,
     $archcommerce_wooCommerceService,
