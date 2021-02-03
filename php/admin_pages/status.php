@@ -71,7 +71,7 @@ if ($credentials_are_valid) {
     $current_month_status_orders_count = isset($current_month_status->orders_count) ? $current_month_status->orders_count : 0;
     $current_month_status_total_cost = isset($current_month_status->cost) ? $current_month_status->cost  : 0;
 
-    $epoch = wp_next_scheduled('archcommerce_init_sync_process');
+    $epoch = wp_next_scheduled('archcommerce_init_sync_products_process');
     if ($epoch) {
         $date = new \DateTime();
         $date->setTimestamp($epoch);
