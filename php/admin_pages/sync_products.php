@@ -1,6 +1,6 @@
 <div class="wrap">
     <span class="dashicons dashicons-cart"></span>
-    <h1 class="wp-heading-inline"><?php _e("Sync process monitoring", "archcommerce"); ?></h1>
+    <h1 class="wp-heading-inline"><?php _e("Sync products process monitoring", "archcommerce"); ?></h1>
     <hr class="wp-header-end" />
     <p id="loading">loading...</p>
     <p id="asp_error" class="asp_display"><?php _e("Something went wrong. See console for more info", "archcommerce"); ?></p>
