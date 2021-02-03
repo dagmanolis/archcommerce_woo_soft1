@@ -75,6 +75,7 @@ if ($credentials_are_valid) {
     if ($epoch) {
         $date = new \DateTime();
         $date->setTimestamp($epoch);
+        $date->setTimezone(wp_timezone());
         $cronjob_starting_time = $date->format("Y-m-d H:i:s");
     } else {
         $cronjob_starting_time = __("not scheduled yet", "archcommerce");
