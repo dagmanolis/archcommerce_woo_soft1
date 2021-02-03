@@ -80,6 +80,8 @@ class WpSettingsBuilderService
         return (get_option('archcommerce_settings') !== false
             && get_option('archcommerce_data') !== false
             && get_option('archcommerce_products_sync_process') !== false
+            && get_option('archcommerce_sync_products_settings') !== false
+            && get_option('archcommerce_sync_orders_settings') !== false
             && get_option('archcommerce_orders_sync_process') !== false);
     }
 
