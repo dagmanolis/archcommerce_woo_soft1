@@ -56,10 +56,10 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
                     $data = $body->data;
                     add_post_meta($order_id, '_archcommerce_soft1_id', $data->soft1_order_id, true);
                 } else {
-                    error_log("Error inserting order with id: " . $order_id . ". Response:"  . print_r($response, true));
+                    throw new \Exception(print_r($response, true));
                 }
             } else {
-                error_log("Error inserting order with id: " . $order_id . ". Response:"  . print_r($response, true));
+                throw new \Exception(print_r($response, true));
             }
         } catch (\Throwable $t) {
             error_log("Error inserting order with id: " . $order_id . ". Error:"  . print_r($t, true));
