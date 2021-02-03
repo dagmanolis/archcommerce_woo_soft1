@@ -4,7 +4,7 @@ namespace webxl\archcommerce\services;
 
 use webxl\archcommerce\services\contracts\IWooCommerceService;
 
-class SyncProcessService
+class ProductsSyncProcessService
 {
     private ArchCommerceApiService $archApiService;
     private SyncTablesService $tableService;

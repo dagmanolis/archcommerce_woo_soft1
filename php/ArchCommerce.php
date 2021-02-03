@@ -4,7 +4,7 @@ namespace webxl\archcommerce;
 
 use webxl\archcommerce\services\WpAdminPagesService;
 use webxl\archcommerce\services\WpSettingsBuilderService;
-use webxl\archcommerce\services\SyncProcessService;
+use webxl\archcommerce\services\ProductsSyncProcessService;
 use webxl\archcommerce\services\AjaxFunctionsService;
 use webxl\archcommerce\services\contracts\IWooCommerceService;
 use webxl\archcommerce\services\DataOptionService;
@@ -18,7 +18,7 @@ class ArchCommerce
 {
     private WpAdminPagesService $wpAdminPagesService;
     private  WpSettingsBuilderService $WpSettingsBuilderService;
-    private SyncProcessService $syncProcessService;
+    private ProductsSyncProcessService $syncProcessService;
     private AjaxFunctionsService $ajaxFunctionsService;
     private SyncTablesService $syncTablesService;
     private WpCronSchedulerService $wpCronSchedulerService;
@@ -30,7 +30,7 @@ class ArchCommerce
     public function __construct(
         WpAdminPagesService $wpAdminPagesService,
         WpSettingsBuilderService $WpSettingsBuilderService,
-        SyncProcessService $syncProcessService,
+        ProductsSyncProcessService $syncProcessService,
         AjaxFunctionsService $ajaxFunctionsService,
         SyncTablesService $syncTablesService,
         WpCronSchedulerService $wpCronSchedulerService,

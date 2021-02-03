@@ -29,7 +29,7 @@ use webxl\archcommerce\services\PluginUpdaterService;
 use webxl\archcommerce\services\SettingsOptionService;
 use webxl\archcommerce\services\SubscriptionService;
 use webxl\archcommerce\services\SyncProcessOptionService;
-use webxl\archcommerce\services\SyncProcessService;
+use webxl\archcommerce\services\ProductsSyncProcessService;
 use webxl\archcommerce\services\SyncTablesService;
 use webxl\archcommerce\services\WooCommerceService;
 use webxl\archcommerce\services\WooCommerceWpmlService;
@@ -77,7 +77,7 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceRequestServic
 require_once(plugin_dir_path(__FILE__) . 'php/services/SubscriptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/CurrentMonthStatusService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/UpdatesHistoryService.php');
-require_once(plugin_dir_path(__FILE__) . 'php/services/SyncProcessService.php');
+require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceApiService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SyncTablesService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/WooCommerceService.php');
@@ -135,7 +135,7 @@ $archcommerce_settingsBuilderService = new WpSettingsBuilderService(
 );
 $archcommerce_syncTablesService = new SyncTablesService();
 
-$archcommerce_syncProcessService = new SyncProcessService(
+$archcommerce_syncProductsProcessService = new ProductsSyncProcessService(
     $archcommerce_apiService,
     $archcommerce_syncTablesService,
     $archcommerce_wooCommerceService,
@@ -156,7 +156,7 @@ $archcommerce_pluginUpdaterService = new PluginUpdaterService();
 $archcommerce_arch = new ArchCommerce(
     $archcommerce_adminPagesService,
     $archcommerce_settingsBuilderService,
-    $archcommerce_syncProcessService,
+    $archcommerce_syncProductsProcessService,
     $archcommerce_ajaxFunctionsService,
     $archcommerce_syncTablesService,
     $archcommerce_wpCronSchedulerService,
