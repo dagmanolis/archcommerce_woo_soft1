@@ -29,12 +29,22 @@ class WpAdminPagesService
         $position = 5;
         add_submenu_page($parent_slug,  $page_title,  $menu_title,  $capability,  $menu_slug, $page_render_function, $position);
 
-        $page_title = __("ArchCommerce Sync Process Status", "archcommerce");
-        $menu_title = __("Sync Process", "archcommerce");
-        $menu_slug =  "archcommerce_admin_sync_process_subpage";
+        $page_title = __("ArchCommerce Products Sync", "archcommerce");
+        $menu_title = __("Products Sync", "archcommerce");
+        $menu_slug =  "archcommerce_admin_products_sync_subpage";
         $capability =  'manage_options';
         $page_render_function = function () {
-            $this->render_page("sync_process");
+            $this->render_page("sync_products");
+        };
+        $position = 10;
+        add_submenu_page($parent_slug,  $page_title,  $menu_title,  $capability,  $menu_slug, $page_render_function, $position);
+
+        $page_title = __("ArchCommerce Orders Sync", "archcommerce");
+        $menu_title = __("Orders Sync", "archcommerce");
+        $menu_slug =  "archcommerce_admin_orders_sync_subpage";
+        $capability =  'manage_options';
+        $page_render_function = function () {
+            $this->render_page("sync_orders");
         };
         $position = 10;
         add_submenu_page($parent_slug,  $page_title,  $menu_title,  $capability,  $menu_slug, $page_render_function, $position);
