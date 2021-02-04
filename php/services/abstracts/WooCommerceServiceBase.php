@@ -3,19 +3,19 @@
 namespace webxl\archcommerce\services\abstracts;
 
 use webxl\archcommerce\services\ArchCommerceApiService;
+use webxl\archcommerce\services\ArchOrderBuilderService;
 use webxl\archcommerce\services\contracts\IWooCommerceService;
-use webxl\archcommerce\services\OrderProcessService;
 
 abstract class WooCommerceServiceBase implements IWooCommerceService
 {
     private ArchCommerceApiService $archCommerceApiService;
-    private OrderProcessService $orderProcessService;
+    private ArchOrderBuilderService $archOrderBuilderService;
     public function __construct(
         ArchCommerceApiService $archCommerceApiService,
-        OrderProcessService $orderProcessService
+        ArchOrderBuilderService $archOrderBuilderService
     ) {
         $this->archCommerceApiService = $archCommerceApiService;
-        $this->orderProcessService = $orderProcessService;
+        $this->archOrderBuilderService = $archOrderBuilderService;
     }
 
     public function update_products($arch_products)
@@ -50,7 +50,7 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
             //check if order has been inserted
             if (!empty(get_post_meta($order_id, '_archcommerce_soft1_id', true)))
                 return;
-            $arch_order = $this->create_arch_order($order_id);
+            $arch_order = $this->archOrderBuilderService->create_arch_order($order_id);
             $response = $this->archCommerceApiService->insert_order($arch_order);
             $response_code = intval(wp_remote_retrieve_response_code($response));
             if ($response_code === 200) {
@@ -68,23 +68,6 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
             error_log("Error inserting order with id: " . $order_id . ". Error:"  . print_r($t, true));
         }
     }
-    protected function create_arch_order($order_id)
-    {
-        $wc_order = wc_get_order($order_id);
 
-        $arch_order = array();
-        $arch_order['status'] = $this->orderProcessService->process_order_status($wc_order);
-        $arch_order['data'] = $this->orderProcessService->process_order_data($wc_order);
-        $arch_order['items'] = $this->orderProcessService->process_order_items($wc_order);
-
-        $arch_customer = array();
-        $arch_customer['info'] = $this->orderProcessService->process_customer_info($wc_order);
-        $arch_customer['note'] = $this->orderProcessService->process_customer_note($wc_order);
-        $arch_customer["billing"] = $this->orderProcessService->process_customer_billing($wc_order);
-        $arch_customer["shipping"] = $this->orderProcessService->process_customer_shipping($wc_order);
-
-        $result = array("order" => $arch_order, "customer" => $arch_customer);
-        return $result;
-    }
     protected abstract function update_product($arch_product, $woo_product_id);
 }

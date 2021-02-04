@@ -5,9 +5,9 @@ if (isset($_REQUEST["init_orders_sync_process"])) {
     if ($result === false)
         $result_html = sprintf('<p style="color:red;">%s</p>', __("An error occured", "archcommerce"));
     else if ($result === 0)
-        $result_html = sprintf('<p style="color:gray;">%s</p>', sprintf(__("Zero orders inserted to Soft1", "archcommerce"), $result));
+        $result_html = sprintf('<p style="color:gray;">%s</p>', sprintf(__("Zero (0) orders inserted to Soft1", "archcommerce"), $result));
     else
-        $result_html = sprintf('<p>%s</p>', sprintf(__("Inserted %d order(s) to Soft1", "archcommerce"), $result));
+        $result_html = sprintf('<p>%s</p>', sprintf(__("Inserted <strong>%s</strong> order(s) to Soft1", "archcommerce"), $result));
 } else {
     $result_html = "";
 }

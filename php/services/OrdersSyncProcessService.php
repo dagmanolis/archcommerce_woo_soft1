@@ -6,12 +6,19 @@ namespace webxl\archcommerce\services;
 class OrdersSyncProcessService
 {
 
-    public function __construct()
-    {
+    private ArchCommerceApiService $archCommerceApiService;
+    private ArchOrderBuilderService $archOrderBuilderService;
+    public function __construct(
+        ArchCommerceApiService $archCommerceApiService,
+        ArchOrderBuilderService $archOrderBuilderService
+    ) {
+        $this->archCommerceApiService = $archCommerceApiService;
+        $this->archOrderBuilderService = $archOrderBuilderService;
     }
     public function init_sync_process()
     {
         try {
+            $orders_inserted = 0;
             $order_statuses = wc_get_order_statuses();
             unset($order_statuses["wc-cancelled"]);
             unset($order_statuses["wc-refunded"]);
@@ -33,14 +40,25 @@ class OrdersSyncProcessService
                 while ($order_wp_query->have_posts()) {
                     $order_wp_query->the_post();
                     $order_id = get_the_ID();
+                    $arch_order = $this->archOrderBuilderService->create_arch_order($order_id);
+                    $response = $this->archCommerceApiService->insert_order($arch_order);
+                    $response_code = intval(wp_remote_retrieve_response_code($response));
+                    if ($response_code === 200) {
+                        $body = json_decode(wp_remote_retrieve_body($response));
+                        if ($body->success) {
+                            $data = $body->data;
+                            add_post_meta($order_id, '_archcommerce_soft1_id', $data->soft1_order_id, true);
+                            $orders_inserted += 1;
+                        }
+                    }
                 }
             }
-            $orders_inserted = $order_wp_query->found_posts;
             wp_reset_postdata();
             return $orders_inserted;
         } catch (\Throwable $t) {
             return false;
         }
+
         return false;
     }
 }

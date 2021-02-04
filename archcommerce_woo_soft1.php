@@ -39,6 +39,7 @@ use webxl\archcommerce\services\WooCommerceWpmlService;
 use webxl\archcommerce\services\ProductsWpCronSchedulerService;
 use webxl\archcommerce\services\SyncOrdersSettingsOptionService;
 use webxl\archcommerce\services\WpmlService;
+use webxl\archcommerce\services\ArchOrderBuilderService;
 
 if (!defined('ARCHCOMMERCE_ADMIN_OPTIONS_PAGE_SLUG'))
     define('ARCHCOMMERCE_ADMIN_OPTIONS_PAGE_SLUG', 'archcommerce-settings');
@@ -76,6 +77,7 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/SettingsOptionService.php
 require_once(plugin_dir_path(__FILE__) . 'php/services/SyncProductsSettingsOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SyncOrdersSettingsOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/DataOptionService.php');
+require_once(plugin_dir_path(__FILE__) . 'php/services/ArchOrderBuilderService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncProcessOptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsWpCronSchedulerService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/OrdersWpCronSchedulerService.php');
@@ -118,17 +120,19 @@ $archcommerce_apiService = new ArchCommerceApiService(
 );
 
 $archcommerce_orderProcessService = new OrderProcessService();
+$archcommerce_archOrderBuilderService = new ArchOrderBuilderService($archcommerce_orderProcessService);
+
 $archcommerce_wpmlService = new WpmlService();
 if ($archcommerce_wpmlService->woocom_multilingual_exists_and_active())
     $archcommerce_wooCommerceService = new WooCommerceWpmlService(
         $archcommerce_apiService,
-        $archcommerce_orderProcessService,
+        $archcommerce_archOrderBuilderService,
         $archcommerce_wpmlService
     );
 else
     $archcommerce_wooCommerceService = new WooCommerceService(
         $archcommerce_apiService,
-        $archcommerce_orderProcessService
+        $archcommerce_archOrderBuilderService
     );
 
 
@@ -152,7 +156,7 @@ $archcommerce_syncProductsProcessService = new ProductsSyncProcessService(
     $archcommerce_subscriptionService
 );
 
-$archcommerce_syncOrdersProcessService = new OrdersSyncProcessService();
+$archcommerce_syncOrdersProcessService = new OrdersSyncProcessService($archcommerce_apiService, $archcommerce_archOrderBuilderService);
 
 $archcommerce_ajaxFunctionsService = new AjaxFunctionsService(
     $archcommerce_productsWpCronSchedulerService,

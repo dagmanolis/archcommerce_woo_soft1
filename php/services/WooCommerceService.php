@@ -7,9 +7,9 @@ use webxl\archcommerce\services\abstracts\WooCommerceServiceBase;
 
 class WooCommerceService extends WooCommerceServiceBase
 {
-    public function __construct(ArchCommerceApiService $archCommerceApiService, OrderProcessService $orderProcessService)
+    public function __construct(ArchCommerceApiService $archCommerceApiService, ArchOrderBuilderService $archOrderBuilderService)
     {
-        parent::__construct($archCommerceApiService, $orderProcessService);
+        parent::__construct($archCommerceApiService, $archOrderBuilderService);
     }
     protected function update_product($arch_product, $woo_product_id)
     {

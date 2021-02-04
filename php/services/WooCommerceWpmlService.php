@@ -9,9 +9,9 @@ class WooCommerceWpmlService extends WooCommerceServiceBase
 {
     private $wpmlService;
     private $lang_codes;
-    public function __construct(ArchCommerceApiService $archCommerceApiService, OrderProcessService $orderProcessService, WpmlService $wpmlService)
+    public function __construct(ArchCommerceApiService $archCommerceApiService, ArchOrderBuilderService $archOrderBuilderService, WpmlService $wpmlService)
     {
-        parent::__construct($archCommerceApiService, $orderProcessService);
+        parent::__construct($archCommerceApiService, $archOrderBuilderService);
         $this->wpmlService = $wpmlService;
         $this->lang_codes = $this->wpmlService->get_active_lang_codes();
     }
