@@ -39,9 +39,9 @@ class WooProduct
 
     public function set_stock($stock)
     {
-        if (!empty($stock) || $stock == "0") {
+        if (!empty($stock) || is_numeric($stock)) {
             $this->woo_product->set_manage_stock(true);
-            wc_update_product_stock($this->woo_product, (int)$stock, 'set', true);
+            wc_update_product_stock($this->woo_product, floatval($stock), 'set', true);
         }
     }
 
