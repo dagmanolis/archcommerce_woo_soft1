@@ -49,22 +49,28 @@ class WooProduct
     {
         if (!empty($stock_status)) {
             $this->woo_product->set_manage_stock(false);
-            switch ($stock_status) {
-                case "no":
-                case "0":
-                case "outofstock":
-                case "false":
-                case false:
+
+            if (is_numeric($stock_status)) {
+                if (floatval($stock_status) <= 0)
                     $this->woo_product->set_stock_status("outofstock");
-                    break;
-                case "yes":
-                case "1":
-                case "instock":
-                case "true":
-                case true:
-                default:
+                else if (floatval($stock_status) > 0)
                     $this->woo_product->set_stock_status("instock");
-                    break;
+            } else {
+                switch ($stock_status) {
+                    case "no":
+                    case "outofstock":
+                    case "false":
+                    case false:
+                        $this->woo_product->set_stock_status("outofstock");
+                        break;
+                    case "yes":
+                    case "instock":
+                    case "true":
+                    case true:
+                    default:
+                        $this->woo_product->set_stock_status("instock");
+                        break;
+                }
             }
         }
     }
