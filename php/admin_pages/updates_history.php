@@ -13,7 +13,7 @@ $response = $updatesHistoryService->get_history();
     <h1 class="wp-heading-inline"><?php _e("Updates History", "archcommerce"); ?></h1>
     <hr class="wp-header-end" />
     <?php if (isset($response)) : ?>
-        <table class="history">
+        <table id="history" class="display" style="width:100%">
             <thead>
                 <th><?php _e("date", "archcommerce"); ?></th>
                 <th><?php _e("type", "archcommerce"); ?></th>

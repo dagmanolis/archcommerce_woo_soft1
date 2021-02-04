@@ -7,16 +7,6 @@ hr.wp-header-end {
   margin-bottom: 25px;
 }
 
-table.history {
-  width: 400px;
-}
-
-table.history th,
-table.history td {
-  border: 1px solid black;
-  padding: 10px;
-}
-
 pre {
   padding: 10px;
   border: 1px solid #c5c5c5;

@@ -243,16 +243,26 @@ class ArchCommerce
             ));
 
             wp_enqueue_script("archcommerce_sync_products_process_script");
-        } else if (strpos($hook, "sync_orders") !== false) {
-            wp_register_script("archcommerce_sync_orders_process_script", ARCHCOMMERCE_PLUGIN_URL . 'js/sync_orders.js', array('jquery'), '1.0.0');
-
-            wp_localize_script('archcommerce_sync_orders_process_script', 'wpobj', array(
-                'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce("quote_wp_nonce"),
-                'areyousure_message' => __("Are you sure you want to start a sync process?", "archcommerce"),
-                'areyousure_cancel_message' => __("Are you sure you want to cancel this sync process?", "archcommerce")
-            ));
-
+        } else if (strpos($hook, "update_history") !== false) {
+            wp_register_script(
+                "archcommerce_sync_orders_process_script",
+                ARCHCOMMERCE_PLUGIN_URL . 'js/update_history.js',
+                array('jquery', 'archcommerce_datatables_script'),
+                '1.0.0'
+            );
+            wp_register_script(
+                "archcommerce_datatables_script",
+                "//cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js",
+                ["jquery"],
+                "1.10.23"
+            );
+            wp_enqueue_style(
+                "archcommerce_datatables_style",
+                "//cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css",
+                [],
+                "1.10.23"
+            );
+            wp_enqueue_script("archcommerce_datatables_script");
             wp_enqueue_script("archcommerce_sync_orders_process_script");
         }
     }
