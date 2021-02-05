@@ -67,15 +67,6 @@ class WpSettingsBuilderService
             "total_batches" => 0,
         );
         add_option('archcommerce_products_sync_process', $defaults);
-
-        $defaults = array(
-            "process_id" => "",
-            "created_at" => "",
-            "finished_at" => "",
-            "status" => "",
-            "orders_inserted" => 0
-        );
-        add_option('archcommerce_orders_sync_process', $defaults);
     }
 
     public function options_exists()
@@ -84,8 +75,7 @@ class WpSettingsBuilderService
             && get_option('archcommerce_data') !== false
             && get_option('archcommerce_products_sync_process') !== false
             && get_option('archcommerce_sync_products_settings') !== false
-            && get_option('archcommerce_sync_orders_settings') !== false
-            && get_option('archcommerce_orders_sync_process') !== false);
+            && get_option('archcommerce_sync_orders_settings') !== false);
     }
 
     public function register_settings()
