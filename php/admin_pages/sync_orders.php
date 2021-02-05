@@ -1,5 +1,6 @@
 <?php
 global $archcommerce_syncOrdersProcessService;
+global $archcommerce_subscriptionService;
 if (isset($_REQUEST["init_orders_sync_process"])) {
     $result = $archcommerce_syncOrdersProcessService->init_sync_process();
     if ($result === false)
@@ -17,9 +18,13 @@ if (isset($_REQUEST["init_orders_sync_process"])) {
     <span class="dashicons dashicons-cart"></span>
     <h1 class="wp-heading-inline"><?php _e("Sync orders", "archcommerce"); ?></h1>
     <hr class="wp-header-end" />
-    <form method="post" action="<?php echo admin_url("admin.php?page=" . $_REQUEST["page"]); ?>">
-        <input type="hidden" name="init_orders_sync_process" />
-        <button class="button-primary"><?php _e("sync orders now", "archcommerce"); ?></button>
-    </form>
-    <?php echo $result_html; ?>
+    <?php if ($archcommerce_subscriptionService->is_insert_orders_active()) : ?>
+        <form method="post" action="<?php echo admin_url("admin.php?page=" . $_REQUEST["page"]); ?>">
+            <input type="hidden" name="init_orders_sync_process" />
+            <button class="button-primary"><?php _e("sync orders now", "archcommerce"); ?></button>
+        </form>
+        <?php echo $result_html; ?>
+    <?php else : ?>
+        <p><?php _e("Sync orders is not enabled in your subscription", "archcommerce"); ?></p>
+    <?php endif; ?>
 </div>

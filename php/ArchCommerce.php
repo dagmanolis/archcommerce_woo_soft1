@@ -15,6 +15,8 @@ use webxl\archcommerce\services\SettingsOptionService;
 use webxl\archcommerce\services\SubscriptionService;
 use webxl\archcommerce\services\ProductsSyncTablesService;
 use webxl\archcommerce\services\ProductsWpCronSchedulerService;
+use webxl\archcommerce\services\SyncOrdersSettingsOptionService;
+use webxl\archcommerce\services\SyncProductsSettingsOptionService;
 
 class ArchCommerce
 {
@@ -31,6 +33,8 @@ class ArchCommerce
     private SettingsOptionService $settingsOptionService;
     private SubscriptionService $subscriptionService;
     private DataOptionService $dataOptionService;
+    private SyncProductsSettingsOptionService $syncProductsSettingsOptionService;
+    private SyncOrdersSettingsOptionService $syncOrdersSettingsOptionService;
     public function __construct(
         WpAdminPagesService $wpAdminPagesService,
         WpSettingsBuilderService $WpSettingsBuilderService,
@@ -44,7 +48,9 @@ class ArchCommerce
         IWooCommerceService $wooCommerceService,
         SettingsOptionService $settingsOptionService,
         SubscriptionService $subscriptionService,
-        DataOptionService $dataOptionService
+        DataOptionService $dataOptionService,
+        SyncProductsSettingsOptionService $syncProductsSettingsOptionService,
+        SyncOrdersSettingsOptionService $syncOrdersSettingsOptionService
     ) {
         $this->wpAdminPagesService = $wpAdminPagesService;
         $this->WpSettingsBuilderService = $WpSettingsBuilderService;
@@ -59,6 +65,8 @@ class ArchCommerce
         $this->settingsOptionService = $settingsOptionService;
         $this->subscriptionService = $subscriptionService;
         $this->dataOptionService = $dataOptionService;
+        $this->syncOrdersSettingsOptionService = $syncOrdersSettingsOptionService;
+        $this->syncProductsSettingsOptionService = $syncProductsSettingsOptionService;
     }
     public function init()
     {
@@ -140,7 +148,10 @@ class ArchCommerce
                 );
             });
 
-        if ($this->productsWpCronSchedulerService->is_init_sync_process_unscheduled())
+        if (
+            $this->productsWpCronSchedulerService->is_init_sync_process_unscheduled() &&
+            $this->settingsOptionService->has_sync_products_scheduled_enabled()
+        )
             add_action('admin_notices', function () {
                 $this->admin_notice(
                     "warning",
@@ -148,7 +159,10 @@ class ArchCommerce
                 );
             });
 
-        if ($this->ordersWpCronSchedulerService->is_init_sync_process_unscheduled())
+        if (
+            $this->ordersWpCronSchedulerService->is_init_sync_process_unscheduled() &&
+            $this->settingsOptionService->has_sync_orders_scheduled_enabled()
+        )
             add_action('admin_notices', function () {
                 $this->admin_notice(
                     "warning",
@@ -182,14 +196,38 @@ class ArchCommerce
             $this->dataOptionService->clear_token();
             $this->subscriptionService->refresh();
         }
+        //schedule or unschedule orders and products sync processes based on new settings
+        if ($new_option["sync_orders_scheduled"] !== $old_option["sync_orders_scheduled"]) {
+            if (
+                $new_option["sync_orders_scheduled"] === "yes" &&
+                $this->subscriptionService->is_insert_orders_active()
+            )
+                $this->ordersWpCronSchedulerService->schedule_init_sync_process(
+                    $this->syncOrdersSettingsOptionService->get_cronjob_starting_time()
+                );
+            else
+                $this->ordersWpCronSchedulerService->unschedule_init_sync_process();
+        }
+
+        if ($new_option["sync_products_scheduled"] !== $old_option["sync_products_scheduled"]) {
+            if (
+                $new_option["sync_products_scheduled"] === "yes"
+            )
+                $this->productsWpCronSchedulerService->schedule_init_sync_process(
+                    $this->syncProductsSettingsOptionService->get_cronjob_starting_time()
+                );
+            else
+                $this->productsWpCronSchedulerService->unschedule_init_sync_process();
+        }
     }
     public function on_sync_products_settings_option_updated($old_option, $new_option)
     {
 
         //schedule init sync process cron job
         if (
-            $new_option["cronjob_starting_time"] instanceof \DateTime &&
-            $new_option["cronjob_starting_time"] !== $old_option["cronjob_starting_time"]
+            $new_option["cronjob_starting_time"] !== $old_option["cronjob_starting_time"] &&
+            $this->settingsOptionService->has_sync_products_scheduled_enabled() &&
+            $new_option["cronjob_starting_time"] instanceof \DateTime
         )
             $this->productsWpCronSchedulerService->schedule_init_sync_process($new_option["cronjob_starting_time"]);
     }
@@ -197,16 +235,23 @@ class ArchCommerce
     {
         //schedule init sync process cron job
         if (
-            $new_option["cronjob_starting_time"] instanceof \DateTime &&
-            $new_option["cronjob_starting_time"] !== $old_option["cronjob_starting_time"]
+            $new_option["cronjob_starting_time"] !== $old_option["cronjob_starting_time"] &&
+            $this->subscriptionService->is_insert_orders_active() &&
+            $this->settingsOptionService->has_sync_orders_scheduled_enabled() &&
+            $new_option["cronjob_starting_time"] instanceof \DateTime
         )
             $this->ordersWpCronSchedulerService->schedule_init_sync_process($new_option["cronjob_starting_time"]);
     }
     public function on_plugin_activated()
     {
         if ($this->WpSettingsBuilderService->options_exists()) {
-            $this->productsWpCronSchedulerService->schedule_init_sync_process();
-            $this->ordersWpCronSchedulerService->schedule_init_sync_process();
+            if ($this->settingsOptionService->has_sync_products_scheduled_enabled())
+                $this->productsWpCronSchedulerService->schedule_init_sync_process();
+            if (
+                $this->settingsOptionService->has_sync_orders_scheduled_enabled() &&
+                $this->subscriptionService->is_insert_orders_active()
+            )
+                $this->ordersWpCronSchedulerService->schedule_init_sync_process();
         } else {
             $this->WpSettingsBuilderService->create_options();
         }

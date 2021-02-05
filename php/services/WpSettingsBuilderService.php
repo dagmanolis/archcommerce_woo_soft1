@@ -18,12 +18,13 @@ class WpSettingsBuilderService
     public function create_options()
     {
 
-
         $defaults = array(
             'email'  => '',
             'password' => '',
             'updates_limit' => 0,
             'sync_orders_realtime' => 'yes',
+            'sync_orders_scheduled' => 'yes',
+            'sync_products_scheduled' => 'yes',
         );
         add_option('archcommerce_settings', $defaults);
 
@@ -149,6 +150,20 @@ class WpSettingsBuilderService
             'sync_orders_realtime',
             __('Sync orders in realtime', 'archcommerce'),
             array($this, 'render_sync_orders_realtime'),
+            'archcommerce_settings_page',
+            'archcommerce_general_settings_section'
+        );
+        add_settings_field(
+            'sync_orders_scheduled',
+            __('Sync orders on schedule', 'archcommerce'),
+            array($this, 'render_sync_orders_scheduled'),
+            'archcommerce_settings_page',
+            'archcommerce_general_settings_section'
+        );
+        add_settings_field(
+            'sync_products_scheduled',
+            __('Sync products on schedule', 'archcommerce'),
+            array($this, 'render_sync_products_scheduled'),
             'archcommerce_settings_page',
             'archcommerce_general_settings_section'
         );
@@ -285,6 +300,20 @@ class WpSettingsBuilderService
         echo checked($options['sync_orders_realtime'], 'yes');
         echo '">';
     }
+    public function render_sync_orders_scheduled()
+    {
+        $options = get_option('archcommerce_settings');
+        echo '<input type="checkbox" name="archcommerce_settings[sync_orders_scheduled]" value="yes" ';
+        echo checked($options['sync_orders_scheduled'], 'yes');
+        echo '">';
+    }
+    public function render_sync_products_scheduled()
+    {
+        $options = get_option('archcommerce_settings');
+        echo '<input type="checkbox" name="archcommerce_settings[sync_products_scheduled]" value="yes" ';
+        echo checked($options['sync_products_scheduled'], 'yes');
+        echo '">';
+    }
     public function render_batch_size()
     {
         $options = get_option('archcommerce_sync_products_settings');
@@ -356,6 +385,8 @@ class WpSettingsBuilderService
         if (!isset($new_option['email']))  $new_option['email']  =  "";
         if (!isset($new_option['password'])) $new_option['password']  =  "";
         if (!isset($new_option['sync_orders_realtime']))  $new_option['sync_orders_realtime']  =  false;
+        if (!isset($new_option['sync_orders_scheduled']))  $new_option['sync_orders_scheduled']  =  false;
+        if (!isset($new_option['sync_products_scheduled']))  $new_option['sync_products_scheduled']  =  false;
         if (!isset($new_option['updates_limit']))  $new_option['updates_limit']  =  0;
 
         //password santization

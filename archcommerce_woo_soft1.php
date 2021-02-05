@@ -180,7 +180,9 @@ $archcommerce_arch = new ArchCommerce(
     $archcommerce_wooCommerceService,
     $archcommerce_settingsOptionService,
     $archcommerce_subscriptionService,
-    $archcommerce_dataOptionService
+    $archcommerce_dataOptionService,
+    $archcommerce_syncProductsSettingsOptionService,
+    $archcommerce_syncOrdersSettingsOptionService
 );
 
 $archcommerce_arch->init();

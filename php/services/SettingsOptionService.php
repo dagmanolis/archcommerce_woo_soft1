@@ -13,6 +13,14 @@ class SettingsOptionService
     {
         return isset($this->settings["sync_orders_realtime"]) ? $this->settings["sync_orders_realtime"] == "yes" : false;
     }
+    public function has_sync_orders_scheduled_enabled()
+    {
+        return isset($this->settings["sync_orders_scheduled"]) ? $this->settings["sync_orders_scheduled"] == "yes" : false;
+    }
+    public function has_sync_products_scheduled_enabled()
+    {
+        return isset($this->settings["sync_products_scheduled"]) ? $this->settings["sync_products_scheduled"] == "yes" : false;
+    }
     public function get_email_and_password()
     {
         $this->reload();
