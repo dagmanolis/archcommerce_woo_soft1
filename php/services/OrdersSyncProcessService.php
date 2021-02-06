@@ -26,6 +26,7 @@ class OrdersSyncProcessService
 
             $order_wp_query_args = array(
                 "post_type" => "shop_order",
+                'posts_per_page' => -1,
                 'post_status' => array_keys($order_statuses),
                 "meta_query" => array(
                     array(
