@@ -93,6 +93,13 @@ if ($credentials_are_valid) {
     } else {
         $insertOrderStatus = sprintf($insertOrderStatus, "color:gray;", __("inactive", "archcommerce"));
     }
+
+    $soft1CustomizationStatus = '<p>' . __("Soft1 customization:", "archcommerce") . '&nbsp; <strong style="%s">%s</strong><p>';
+    if ($archcommerce_subscriptionService->is_customization_active()) {
+        $soft1CustomizationStatus = sprintf($soft1CustomizationStatus, "color:black;", __("active", "archcommerce"));
+    } else {
+        $soft1CustomizationStatus = sprintf($soft1CustomizationStatus, "color:gray;", __("inactive", "archcommerce"));
+    }
 }
 
 ?>
@@ -114,6 +121,7 @@ if ($credentials_are_valid) {
             <h3><?php _e("Subscription Status", "archcommerce"); ?></h3>
             <?php echo $subscription_status; ?>
             <?php echo $insertOrderStatus; ?>
+            <?php echo $soft1CustomizationStatus; ?>
             <form method="post" action="<?php echo admin_url("admin.php?page=" . $_REQUEST["page"]); ?>">
                 <input type="hidden" name="refresh_subscription" />
                 <input type="submit" class="button-primary" value="<?php _e("refresh subscription", "archcommerce"); ?>" />
