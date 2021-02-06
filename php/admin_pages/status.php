@@ -69,7 +69,6 @@ if ($credentials_are_valid) {
 
     $current_month_status_products_count = isset($current_month_status->products_count) ? $current_month_status->products_count : 0;
     $current_month_status_orders_count = isset($current_month_status->orders_count) ? $current_month_status->orders_count : 0;
-    $current_month_status_total_cost = isset($current_month_status->cost) ? $current_month_status->cost  : 0;
 
     $epoch = wp_next_scheduled('archcommerce_init_sync_products_process');
     if ($epoch) {
@@ -125,8 +124,6 @@ if ($credentials_are_valid) {
             <strong><?php _e("total product updates:", "archcommerce"); ?></strong>&nbsp;<span><?php echo number_format((int)$current_month_status_products_count, 0, ',', '.'); ?></span>
             <br />
             <strong><?php _e("total order updates:", "archcommerce"); ?></strong>&nbsp;<span><?php echo number_format((int)$current_month_status_orders_count, 0, ',', '.'); ?></span>
-            <br />
-            <strong><?php _e("total cost:", "archcommerce"); ?></strong>&nbsp;<span><?php echo number_format((float)$current_month_status_total_cost, 2, ',', '.'); ?>&euro;</span>
         </div>
         <div id="cron_job">
             <h3><?php _e("Cron Jobs", "archcommerce"); ?></h3>
