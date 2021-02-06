@@ -42,7 +42,7 @@ if ($credentials_are_valid) {
             $subscription_status = '<span>' .
                 __(
                     sprintf(
-                        "Your subscription expires in <strong>%s</strong> day(s)",
+                        "your subscription expires in <strong>%s</strong> day(s)",
                         $archcommerce_subscriptionService->get_subscription_days_left()
                     ),
                     "archcommerce"
@@ -75,9 +75,19 @@ if ($credentials_are_valid) {
         $date = new \DateTime();
         $date->setTimestamp($epoch);
         $date->setTimezone(wp_timezone());
-        $cronjob_starting_time = $date->format("Y-m-d H:i:s");
+        $products_cronjob_starting_time = $date->format("Y-m-d H:i:s");
     } else {
-        $cronjob_starting_time = __("not scheduled yet", "archcommerce");
+        $products_cronjob_starting_time = __("not scheduled", "archcommerce");
+    }
+
+    $epoch = wp_next_scheduled('archcommerce_init_sync_orders_process');
+    if ($epoch) {
+        $date = new \DateTime();
+        $date->setTimestamp($epoch);
+        $date->setTimezone(wp_timezone());
+        $orders_cronjob_starting_time = $date->format("Y-m-d H:i:s");
+    } else {
+        $orders_cronjob_starting_time = __("not scheduled", "archcommerce");
     }
 
     if (!defined("DISABLE_WP_CRON"))
@@ -87,14 +97,14 @@ if ($credentials_are_valid) {
     else if (defined("DISABLE_WP_CRON") && DISABLE_WP_CRON === false)
         $cronjob_wp_disable = __("enabled", "archcommerce");
 
-    $insertOrderStatus = '<p>' . __("Insert order status:", "archcommerce") . '&nbsp; <strong style="%s">%s</strong><p>';
+    $insertOrdersStatus = '<p>' . __("insert orders status:", "archcommerce") . '&nbsp; <strong style="%s">%s</strong><p>';
     if ($archcommerce_subscriptionService->is_insert_orders_active()) {
-        $insertOrderStatus = sprintf($insertOrderStatus, "color:black;", __("active", "archcommerce"));
+        $insertOrdersStatus = sprintf($insertOrdersStatus, "color:black;", __("active", "archcommerce"));
     } else {
-        $insertOrderStatus = sprintf($insertOrderStatus, "color:gray;", __("inactive", "archcommerce"));
+        $insertOrdersStatus = sprintf($insertOrdersStatus, "color:gray;", __("inactive", "archcommerce"));
     }
 
-    $soft1CustomizationStatus = '<p>' . __("Soft1 customization:", "archcommerce") . '&nbsp; <strong style="%s">%s</strong><p>';
+    $soft1CustomizationStatus = '<p>' . __("soft1 customization:", "archcommerce") . '&nbsp; <strong style="%s">%s</strong><p>';
     if ($archcommerce_subscriptionService->is_customization_active()) {
         $soft1CustomizationStatus = sprintf($soft1CustomizationStatus, "color:black;", __("active", "archcommerce"));
     } else {
@@ -109,8 +119,7 @@ if ($credentials_are_valid) {
     <hr class="wp-header-end" />
     <div id="connection_status">
         <h3><?php _e("Connection Status", "archcommerce"); ?></h3>
-        <strong><?php _e("Connection to ArchCommerce Service:", "archcommerce"); ?></strong>&nbsp;<?php echo $connection_status; ?>
-        <br /><br />
+        <p><?php _e("connection to ArchCommerce service:", "archcommerce"); ?>&nbsp;<strong><?php echo $connection_status; ?></strong></p>
         <form method="post" action="<?php echo admin_url("admin.php?page=" . $_REQUEST["page"]); ?>">
             <input type="hidden" name="clear_token" />
             <input type="submit" class="button-primary" value="<?php _e("clear token", "archcommerce"); ?>" />
@@ -120,7 +129,7 @@ if ($credentials_are_valid) {
         <div id="subscription_status">
             <h3><?php _e("Subscription Status", "archcommerce"); ?></h3>
             <?php echo $subscription_status; ?>
-            <?php echo $insertOrderStatus; ?>
+            <?php echo $insertOrdersStatus; ?>
             <?php echo $soft1CustomizationStatus; ?>
             <form method="post" action="<?php echo admin_url("admin.php?page=" . $_REQUEST["page"]); ?>">
                 <input type="hidden" name="refresh_subscription" />
@@ -129,15 +138,17 @@ if ($credentials_are_valid) {
         </div>
         <div id="current_month_status">
             <h3><?php _e("Current Month Status", "archcommerce"); ?></h3>
-            <strong><?php _e("total product updates:", "archcommerce"); ?></strong>&nbsp;<span><?php echo number_format((int)$current_month_status_products_count, 0, ',', '.'); ?></span>
-            <br />
-            <strong><?php _e("total order updates:", "archcommerce"); ?></strong>&nbsp;<span><?php echo number_format((int)$current_month_status_orders_count, 0, ',', '.'); ?></span>
+            <p><?php _e("total product updates:", "archcommerce"); ?>&nbsp;<strong><?php echo number_format((int)$current_month_status_products_count, 0, ',', '.'); ?></strong></p>
+            <p><?php _e("total order updates:", "archcommerce"); ?>&nbsp;<strong><?php echo number_format((int)$current_month_status_orders_count, 0, ',', '.'); ?></strong></p>
+        </div>
+        <div id="sync_process">
+            <h3><?php _e("Sync Processes", "archcommerce"); ?></h3>
+            <p><?php _e("next products sync:", "archcommerce"); ?>&nbsp;<strong><?php echo $products_cronjob_starting_time; ?></strong></p>
+            <p><?php _e("next orders sync:", "archcommerce"); ?>&nbsp;<strong><?php echo $orders_cronjob_starting_time; ?></strong></p>
         </div>
         <div id="cron_job">
-            <h3><?php _e("Cron Jobs", "archcommerce"); ?></h3>
-            <strong><?php _e("next sync init:", "archcommerce"); ?></strong>&nbsp;<span><?php echo $cronjob_starting_time; ?></span>
-            <br />
-            <strong><?php _e("DISABLE_WP_CRON:", "archcommerce"); ?></strong>&nbsp;<span><?php echo $cronjob_wp_disable; ?></span>
+            <h3><?php _e("Cron Info", "archcommerce"); ?></h3>
+            <p><?php _e("DISABLE_WP_CRON:", "archcommerce"); ?>&nbsp;<strong><?php echo $cronjob_wp_disable; ?></strong></p>
             <p>
             <h4><?php _e("Server custom cron job instructions:", "archcommerce"); ?></h4>
             <ol>
