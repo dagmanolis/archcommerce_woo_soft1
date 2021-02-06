@@ -105,6 +105,10 @@ class ArchCommerce
                 add_action("archcommerce_process_sync_products_process", array($this->productsSyncProcessService, "process_sync_process"));
                 add_action("archcommerce_init_sync_orders_process", array($this->ordersSyncProcessService, "init_sync_process"));
                 register_uninstall_hook(__FILE__, 'delete_table');
+                if ($this->subscriptionService->is_insert_orders_active()) {
+                    add_filter('manage_edit-shop_order_columns', array($this, 'archcommerce_add_order_new_column_header'), 20);
+                    add_action('manage_shop_order_posts_custom_column',  array($this, 'archcommerce_add_wc_order_admin_list_column_content'));
+                }
                 if (
                     $this->subscriptionService->is_insert_orders_active() &&
                     $this->settingsOptionService->has_sync_orders_realtime_enabled()
@@ -241,6 +245,30 @@ class ArchCommerce
             $new_option["cronjob_starting_time"] instanceof \DateTime
         )
             $this->ordersWpCronSchedulerService->schedule_init_sync_process($new_option["cronjob_starting_time"]);
+    }
+    public function archcommerce_add_order_new_column_header($columns)
+    {
+
+        $new_columns = array();
+
+        foreach ($columns as $column_name => $column_info) {
+
+            $new_columns[$column_name] = $column_info;
+
+            if ('order_total' === $column_name) {
+                $new_columns['soft1_order_id'] = __('Soft1 Id', 'archcommerce');
+            }
+        }
+
+        return $new_columns;
+    }
+    function archcommerce_add_wc_order_admin_list_column_content($column)
+    {
+
+        global $post;
+
+        if ('soft1_order_id' === $column)
+            echo get_post_meta($post->ID, '_archcommerce_soft1_id', true);
     }
     public function on_plugin_activated()
     {
