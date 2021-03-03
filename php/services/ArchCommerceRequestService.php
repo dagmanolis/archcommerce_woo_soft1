@@ -29,21 +29,29 @@ class ArchCommerceRequestService
         }
         switch (strtolower($method)) {
             case 'post':
-                if (defined("WP_DEBUG") && WP_DEBUG == true)
+                $wp_remote_options = array(
+                    'headers' => $headers,
+                    'body' => $body,
+                );
+                if (defined("WP_DEBUG") && WP_DEBUG == true) {
                     $_url = ARCHCOMMERCE_SERVICE_URL . $url .  '?XDEBUG_SESSION_START=1';
-                else
+                    $wp_remote_options["sslverify"] = false;
+                } else {
                     $_url = ARCHCOMMERCE_SERVICE_URL . $url;
+                }
                 $response = wp_remote_post(
                     $_url,
-                    array(
-                        'headers' => $headers,
-                        'body' => $body
-                    )
+                    $wp_remote_options
                 );
                 break;
             case 'get':
+                $wp_remote_options = array(
+                    'headers' => $headers,
+                    'body' => $body,
+                );
                 if (defined("WP_DEBUG") && WP_DEBUG == true) {
                     $body["XDEBUG_SESSION_START"] = 1;
+                    $wp_remote_options["sslverify"] = false;
                 }
                 $query_params = http_build_query($body);
                 $_url = empty($query_params) ?
@@ -52,9 +60,7 @@ class ArchCommerceRequestService
 
                 $response = wp_remote_get(
                     $_url,
-                    array(
-                        'headers' => $headers
-                    )
+                    $wp_remote_options
                 );
                 break;
         }
