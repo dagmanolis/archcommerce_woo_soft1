@@ -67,7 +67,6 @@ class WooProduct
                     case "instock":
                     case "true":
                     case true:
-                    default:
                         $this->woo_product->set_stock_status("instock");
                         break;
                 }
@@ -91,7 +90,6 @@ class WooProduct
                 case "visible":
                 case "true":
                 case true:
-                default:
                     $this->woo_product->set_catalog_visibility("visible");
                     break;
             }
@@ -111,7 +109,6 @@ class WooProduct
                 case "1":
                 case "true":
                 case true:
-                default:
                     $this->woo_product->set_featured(true);
                     break;
             }
