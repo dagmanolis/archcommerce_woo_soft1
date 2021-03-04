@@ -21,10 +21,9 @@ class ProductsWpCronSchedulerService
         $now = \DateTime::createFromFormat("Y-m-d H:i:s", gmdate("Y-m-d H:i:s", time()));
         $now->setTimezone(wp_timezone());
         if ($now > $_starting_date) {
-            $tomorrow = $now->add(new \DateInterval("P1D"));
-            $_starting_date = $tomorrow;
+            $_starting_date = $now->add(new \DateInterval("PT10S"));
         }
-
+        //error_log(sprintf("Schedule products sync process at %s \r\n Debug Backtrace: %s", $_starting_date->format("Y-m-d H:i:s"), print_r(debug_backtrace(), true)));
         if ($_starting_date) {
             $this->unschedule_init_sync_process();
             wp_schedule_event($_starting_date->getTimestamp(), 'archcommerce_sync_products_custom_interval', 'archcommerce_init_sync_products_process');

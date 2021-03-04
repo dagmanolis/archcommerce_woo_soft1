@@ -201,7 +201,7 @@ class ArchCommerce
             $this->subscriptionService->refresh();
         }
         //schedule or unschedule orders and products sync processes based on new settings
-        if ($new_option["sync_orders_scheduled"] !== $old_option["sync_orders_scheduled"]) {
+        if (!($new_option["sync_orders_scheduled"] == $old_option["sync_orders_scheduled"])) {
             if (
                 $new_option["sync_orders_scheduled"] === "yes" &&
                 $this->subscriptionService->is_insert_orders_active()
@@ -213,7 +213,7 @@ class ArchCommerce
                 $this->ordersWpCronSchedulerService->unschedule_init_sync_process();
         }
 
-        if ($new_option["sync_products_scheduled"] !== $old_option["sync_products_scheduled"]) {
+        if (!($new_option["sync_products_scheduled"] == $old_option["sync_products_scheduled"])) {
             if (
                 $new_option["sync_products_scheduled"] === "yes"
             )
@@ -229,7 +229,7 @@ class ArchCommerce
 
         //schedule init sync process cron job
         if (
-            $new_option["cronjob_starting_time"] !== $old_option["cronjob_starting_time"] &&
+            !($new_option["cronjob_starting_time"] == $old_option["cronjob_starting_time"]) &&
             $this->settingsOptionService->has_sync_products_scheduled_enabled() &&
             $new_option["cronjob_starting_time"] instanceof \DateTime
         )
