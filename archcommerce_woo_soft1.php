@@ -4,7 +4,7 @@
  * Plugin Name: ArchCommerce
  * Plugin URI: https://webxl.gr/archcommerce
  * Description: A bridge between WooCommerce and SoftOne ERP.
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author: webxl.gr
  * Author URI: https://webxl.gr
  * Text Domain: archcommerce

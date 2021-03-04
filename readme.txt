@@ -3,7 +3,7 @@ Contributors: dagmanolis
 Tags: woocommerce, softone, wpml
 Requires at least: 5.6
 Tested up to: 5.6
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,11 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 
 
 == Changelog ==
+
+= 2.1.1 =
+2021/03/04
+* bugfix: (new option !== old_option) causing rescheduling of sync process
+* change: start cron after 10sec if starting date is older than now
 
 = 2.1.0 =
 2021/03/03
