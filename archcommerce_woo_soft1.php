@@ -4,7 +4,7 @@
  * Plugin Name: ArchCommerce
  * Plugin URI: https://webxl.gr/archcommerce
  * Description: A bridge between WooCommerce and SoftOne ERP.
- * Version: 2.2.1
+ * Version: 2.3.0
  * Author: webxl.gr
  * Author URI: https://webxl.gr
  * Text Domain: archcommerce
@@ -53,17 +53,14 @@ if (!defined('ARCHCOMMERCE_PLUGIN_DIR'))
 if (!defined('ARCHCOMMERCE_PLUGIN_URL'))
     define('ARCHCOMMERCE_PLUGIN_URL',  plugin_dir_url(__FILE__));
 
-if (!defined('ARCHCOMMERCE_BITBUCKET_OAUTH_PUBLIC_KEY'))
-    define('ARCHCOMMERCE_BITBUCKET_OAUTH_PUBLIC_KEY', 'XmHweQFUSPbqaZMtMg');
-
-if (!defined('ARCHCOMMERCE_BITBUCKET_OAUTH_SECRET_KEY'))
-    define('ARCHCOMMERCE_BITBUCKET_OAUTH_SECRET_KEY', 'VDrPxQbcHZyaYrPkcAT4BvLJzvtrS9d4');
+if (!defined('ARCHCOMMERCE_GITHUB_PERSONAL_ACCESS_TOKEN'))
+    define('ARCHCOMMERCE_GITHUB_PERSONAL_ACCESS_TOKEN', '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');
 
 if (!defined('ARCHCOMMERCE_SECRET_KEY'))
-    define('ARCHCOMMERCE_SECRET_KEY', ARCHCOMMERCE_BITBUCKET_OAUTH_PUBLIC_KEY);
+    define('ARCHCOMMERCE_SECRET_KEY', "XmHweQFUSPbqaZMtMg");
 
 if (!defined('ARCHCOMMERCE_SECRET_IV'))
-    define('ARCHCOMMERCE_SECRET_IV', ARCHCOMMERCE_BITBUCKET_OAUTH_SECRET_KEY);
+    define('ARCHCOMMERCE_SECRET_IV', "VDrPxQbcHZyaYrPkcAT4BvLJzvtrS9d4");
 
 if (!defined('ARCHCOMMERCE_SERVICE_URL'))
     define('ARCHCOMMERCE_SERVICE_URL', 'https://api.archcommerce.gr');
