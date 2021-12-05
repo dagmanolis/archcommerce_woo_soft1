@@ -21,7 +21,7 @@ class SubscriptionService
             $date->setTimezone(wp_timezone());
             $this->dataOptionService->set_subscription_expiration_date($date);
             $this->dataOptionService->set_insert_orders_active($subscription->insert_orders_active);
-            $this->dataOptionService->set_customization_active($subscription->customization_active);
+            $this->dataOptionService->set_sync_products_active($subscription->sync_products_active);
         }
     }
     public function get_subscription_days_left()
@@ -53,13 +53,13 @@ class SubscriptionService
     {
         return $this->dataOptionService->is_insert_orders_active();
     }
-    public function is_customization_active()
+    public function is_sync_products_active()
     {
-        return $this->dataOptionService->is_customization_active();
+        return $this->dataOptionService->is_sync_products_active();
     }
     private function get_subscription()
     {
-        $response = $this->requestService->send_request('/api/v1.0/user/subscription');
+        $response = $this->requestService->send_request('/api/v' . ARCHCOMMERCE_API_VERSION . '/user/subscription');
         return json_decode(wp_remote_retrieve_body($response));
     }
 }

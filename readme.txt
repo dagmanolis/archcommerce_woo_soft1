@@ -32,9 +32,12 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 
 == Changelog ==
 
+* feature: sync products active
+* feature: api v1.1
+
 = 2.3.0 =
 2021/12/05
-transitional version (migrated from bitbucket to github)
+* transitional version (migrated from bitbucket to github)
 
 = 2.2.1 =
 2021/03/15
