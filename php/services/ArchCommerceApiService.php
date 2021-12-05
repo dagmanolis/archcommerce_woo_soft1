@@ -24,7 +24,7 @@ class ArchCommerceApiService
             );
         else
             $body = null;
-        $url = "/api/v' . ARCHCOMMERCE_API_VERSION . '/soft1/product";
+        $url = "/api/v" . ARCHCOMMERCE_API_VERSION . "/soft1/product";
         return $this->requestService->send_request($url, $body);
     }
     public function insert_order($order)
