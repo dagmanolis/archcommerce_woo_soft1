@@ -63,7 +63,10 @@ if (!defined('ARCHCOMMERCE_SECRET_IV'))
     define('ARCHCOMMERCE_SECRET_IV', "VDrPxQbcHZyaYrPkcAT4BvLJzvtrS9d4");
 
 if (!defined('ARCHCOMMERCE_SERVICE_URL'))
-    define('ARCHCOMMERCE_SERVICE_URL', 'https://api.archcommerce.gr');
+    define('ARCHCOMMERCE_SERVICE_URL', 'https://archcommerce.local');
+
+if (!defined('ARCHCOMMERCE_API_VERSION'))
+    define('ARCHCOMMERCE_API_VERSION', "1.1");
 
 require_once(plugin_dir_path(__FILE__) . 'php/services/contracts/IWooCommerceService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/abstracts/WooCommerceServiceBase.php');
@@ -82,7 +85,6 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/EncryptService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceRequestService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SubscriptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/CurrentMonthStatusService.php');
-require_once(plugin_dir_path(__FILE__) . 'php/services/UpdatesHistoryService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/OrdersSyncProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceApiService.php');

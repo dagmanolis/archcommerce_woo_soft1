@@ -88,7 +88,7 @@ class ArchCommerceRequestService
             "email" => $email_and_password["email"],
             "password" => $this->encryptService->decrypt($email_and_password["password"]),
         );
-        $url = '/api/v1.0/login';
+        $url = '/api/v' . ARCHCOMMERCE_API_VERSION . '/login';
         return $this->send_request($url, $body, 'post', false);
     }
 }

@@ -33,15 +33,16 @@ class ProductsSyncProcessService
     public function init_sync_process()
     {
         try {
-            if ($this->subscriptionService->get_subscription_status() !== "active")
+            if (
+                $this->subscriptionService->get_subscription_status() !== "active"
+                || $this->subscriptionService->is_sync_products_active() != true
+            )
                 return;
+
             if ($this->productsSyncProcessOptionService->is_status_ready_for_init()) {
                 $batch_size = $this->syncProductsSettingsOptionService->get_batch_size();
                 $this->productsSyncProcessOptionService->init_sync_process($batch_size);
-                if ($this->subscriptionService->is_customization_active())
-                    $fetch_response = $this->archApiService->fetch_products($this->syncProductsSettingsOptionService->get_last_update_date());
-                else
-                    $fetch_response = $this->archApiService->fetch_products();
+                $fetch_response = $this->archApiService->fetch_products($this->syncProductsSettingsOptionService->get_last_update_date());
                 $response_code = intval(wp_remote_retrieve_response_code($fetch_response));
                 switch ($response_code) {
                     case 200:
