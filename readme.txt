@@ -3,7 +3,7 @@ Contributors: dagmanolis
 Tags: woocommerce, softone, wpml
 Requires at least: 5.6
 Tested up to: 5.6
-Stable tag: 2.3.0
+Stable tag: 2.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -32,9 +32,14 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 
 == Changelog ==
 
+= 2.4.0 =
+2021/12/06
+* feature: sync products active
+* feature: api v1.1
+
 = 2.3.0 =
 2021/12/05
-transitional version (migrated from bitbucket to github)
+* transitional version (migrated from bitbucket to github)
 
 = 2.2.1 =
 2021/03/15

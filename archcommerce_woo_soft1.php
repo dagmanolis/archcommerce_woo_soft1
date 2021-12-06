@@ -4,7 +4,7 @@
  * Plugin Name: ArchCommerce
  * Plugin URI: https://webxl.gr/archcommerce
  * Description: A bridge between WooCommerce and SoftOne ERP.
- * Version: 2.3.0
+ * Version: 2.4.0
  * Author: webxl.gr
  * Author URI: https://webxl.gr
  * Text Domain: archcommerce
@@ -65,6 +65,9 @@ if (!defined('ARCHCOMMERCE_SECRET_IV'))
 if (!defined('ARCHCOMMERCE_SERVICE_URL'))
     define('ARCHCOMMERCE_SERVICE_URL', 'https://api.archcommerce.gr');
 
+if (!defined('ARCHCOMMERCE_API_VERSION'))
+    define('ARCHCOMMERCE_API_VERSION', "1.1");
+
 require_once(plugin_dir_path(__FILE__) . 'php/services/contracts/IWooCommerceService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/abstracts/WooCommerceServiceBase.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/WpAdminPagesService.php');
@@ -82,7 +85,6 @@ require_once(plugin_dir_path(__FILE__) . 'php/services/EncryptService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceRequestService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/SubscriptionService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/CurrentMonthStatusService.php');
-require_once(plugin_dir_path(__FILE__) . 'php/services/UpdatesHistoryService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ProductsSyncProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/OrdersSyncProcessService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/ArchCommerceApiService.php');

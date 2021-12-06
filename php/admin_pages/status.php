@@ -1,12 +1,9 @@
 <?php
 
-use webxl\archcommerce\services\CurrentMonthStatusService;
-
 global $archcommerce_dataOptionService;
 global $archcommerce_apiService;
 global $archcommerce_requestService;
 global $archcommerce_subscriptionService;
-$currentMonthStatusService = new CurrentMonthStatusService($archcommerce_requestService);
 
 if (isset($_REQUEST["clear_token"]))
     $archcommerce_dataOptionService->clear_token();
@@ -65,11 +62,6 @@ if ($credentials_are_valid) {
             break;
     }
 
-    $current_month_status = $currentMonthStatusService->get_status();
-
-    $current_month_status_products_count = isset($current_month_status->products_count) ? $current_month_status->products_count : 0;
-    $current_month_status_orders_count = isset($current_month_status->orders_count) ? $current_month_status->orders_count : 0;
-
     $epoch = wp_next_scheduled('archcommerce_init_sync_products_process');
     if ($epoch) {
         $date = new \DateTime();
@@ -104,11 +96,11 @@ if ($credentials_are_valid) {
         $insertOrdersStatus = sprintf($insertOrdersStatus, "color:gray;", __("inactive", "archcommerce"));
     }
 
-    $soft1CustomizationStatus = '<p>' . __("soft1 customization:", "archcommerce") . '&nbsp; <strong style="%s">%s</strong><p>';
-    if ($archcommerce_subscriptionService->is_customization_active()) {
-        $soft1CustomizationStatus = sprintf($soft1CustomizationStatus, "color:black;", __("active", "archcommerce"));
+    $syncProductsStatus = '<p>' . __("sync products status:", "archcommerce") . '&nbsp; <strong style="%s">%s</strong><p>';
+    if ($archcommerce_subscriptionService->is_sync_products_active()) {
+        $syncProductsStatus = sprintf($syncProductsStatus, "color:black;", __("active", "archcommerce"));
     } else {
-        $soft1CustomizationStatus = sprintf($soft1CustomizationStatus, "color:gray;", __("inactive", "archcommerce"));
+        $syncProductsStatus = sprintf($syncProductsStatus, "color:gray;", __("inactive", "archcommerce"));
     }
 }
 
@@ -130,16 +122,11 @@ if ($credentials_are_valid) {
             <h3><?php _e("Subscription Status", "archcommerce"); ?></h3>
             <?php echo $subscription_status; ?>
             <?php echo $insertOrdersStatus; ?>
-            <?php echo $soft1CustomizationStatus; ?>
+            <?php echo $syncProductsStatus; ?>
             <form method="post" action="<?php echo admin_url("admin.php?page=" . $_REQUEST["page"]); ?>">
                 <input type="hidden" name="refresh_subscription" />
                 <input type="submit" class="button-primary" value="<?php _e("refresh subscription", "archcommerce"); ?>" />
             </form>
-        </div>
-        <div id="current_month_status">
-            <h3><?php _e("Current Month Status", "archcommerce"); ?></h3>
-            <p><?php _e("total product updates:", "archcommerce"); ?>&nbsp;<strong><?php echo number_format((int)$current_month_status_products_count, 0, ',', '.'); ?></strong></p>
-            <p><?php _e("total order updates:", "archcommerce"); ?>&nbsp;<strong><?php echo number_format((int)$current_month_status_orders_count, 0, ',', '.'); ?></strong></p>
         </div>
         <div id="sync_process">
             <h3><?php _e("Sync Processes", "archcommerce"); ?></h3>

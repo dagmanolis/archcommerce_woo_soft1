@@ -59,16 +59,6 @@ class WpAdminPagesService
         $position = 20;
         add_submenu_page($parent_slug,  $page_title,  $menu_title,  $capability,  $menu_slug, $page_render_function, $position);
 
-        $page_title = __("ArchCommerce Updates History", "archcommerce");
-        $menu_title = __("Updates History", "archcommerce");
-        $menu_slug =  "archcommerce_admin_update_history_subpage";
-        $capability =  'manage_options';
-        $page_render_function = function () {
-            $this->render_page("updates_history");
-        };
-        $position = 30;
-        add_submenu_page($parent_slug,  $page_title,  $menu_title,  $capability,  $menu_slug, $page_render_function, $position);
-
         remove_submenu_page('archcommerce_admin_main_page', 'archcommerce_admin_main_page');
     }
 
