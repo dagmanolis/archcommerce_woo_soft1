@@ -272,6 +272,12 @@ class ArchCommerce
     }
     public function on_plugin_activated()
     {
+        $plugin_version = ARCHCOMMERCE_PLUGIN_VERSION;
+        $db_plugin_version = get_option("archcommerce_plugin_version");
+        if ($db_plugin_version == false || version_compare($plugin_version, $db_plugin_version) == 1) {
+            $this->do_update_stuff();
+            update_option("archcommerce_plugin_version", ARCHCOMMERCE_PLUGIN_VERSION);
+        }
         if ($this->WpSettingsBuilderService->options_exists()) {
             if ($this->settingsOptionService->has_sync_products_scheduled_enabled())
                 $this->productsWpCronSchedulerService->schedule_init_sync_process();
@@ -285,6 +291,18 @@ class ArchCommerce
         }
 
         $this->productsSyncTablesService->create_table();
+    }
+    public function do_update_stuff()
+    {
+        switch (ARCHCOMMERCE_PLUGIN_VERSION) {
+            case "2.4.2":
+                add_option("archcommerce_plugin_version", ARCHCOMMERCE_PLUGIN_VERSION);
+                $data = get_option("archcommerce_data");
+                $data["sync_products_active"] = "";
+                unset($data["has_customization"]);
+                update_option("archcommerce_data", $data);
+                break;
+        }
     }
     public function on_plugin_deactivated()
     {
