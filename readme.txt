@@ -33,6 +33,7 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 == Changelog ==
 
 = 2.4.2 =
+2021/12/07
 * bugfix: options not updating after plugin update
 
 = 2.4.1 =
