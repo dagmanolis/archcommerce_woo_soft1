@@ -16,6 +16,7 @@ class ArchOrderBuilderService
         $wc_order = wc_get_order($order_id);
 
         $arch_order = array();
+        $arch_order["id"] =  $order_id;
         $arch_order['status'] = $this->orderProcessService->process_order_status($wc_order);
         $arch_order['data'] = $this->orderProcessService->process_order_data($wc_order);
         $arch_order['items'] = $this->orderProcessService->process_order_items($wc_order);
