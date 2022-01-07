@@ -32,7 +32,12 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 
 == Changelog ==
 
+= 2.5.1 =
+2022/01/07
+* bugfix: wrong api url
+
 = 2.5.0 =
+2022/01/07
 * feature: include order id when sending order to soft1
 
 = 2.4.2 =
