@@ -4,7 +4,7 @@
  * Plugin Name: ArchCommerce
  * Plugin URI: https://webxl.gr/archcommerce
  * Description: A bridge between WooCommerce and SoftOne ERP.
- * Version: 2.5.1
+ * Version: 2.6.0
  * Author: webxl.gr
  * Author URI: https://webxl.gr
  * Text Domain: archcommerce
@@ -12,7 +12,7 @@
  * Requires at least: 5.6
  * Requires PHP: 7.4
  * WC requires at least: 3.0.0
- * WC tested up to: 4.9.2
+ * WC tested up to: 6.2.1
  **/
 
 namespace webxl\archcommerce;
@@ -69,7 +69,7 @@ if (!defined('ARCHCOMMERCE_API_VERSION'))
     define('ARCHCOMMERCE_API_VERSION', "1.1");
 
 if (!defined('ARCHCOMMERCE_PLUGIN_VERSION'))
-    define('ARCHCOMMERCE_PLUGIN_VERSION', "2.5.1");
+    define('ARCHCOMMERCE_PLUGIN_VERSION', "2.6.0");
 
 require_once(plugin_dir_path(__FILE__) . 'php/services/contracts/IWooCommerceService.php');
 require_once(plugin_dir_path(__FILE__) . 'php/services/abstracts/WooCommerceServiceBase.php');
