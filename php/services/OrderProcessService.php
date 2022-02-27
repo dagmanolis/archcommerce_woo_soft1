@@ -32,6 +32,7 @@ class OrderProcessService
             $result = array();
             $result['shipping_method'] = $wc_order->get_shipping_method();
             $result['payment_method_title'] = $wc_order->get_payment_method_title();
+            $result['payment_method'] = $wc_order->get_payment_method();
             $result['cart_tax'] = $wc_order->get_cart_tax();
             $result['currency'] = $wc_order->get_currency();
             $result['discount_tax'] = $wc_order->get_discount_tax();
