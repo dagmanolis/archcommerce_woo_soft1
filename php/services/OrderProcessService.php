@@ -113,4 +113,13 @@ class OrderProcessService
             return $result;
         }
     }
+
+    public function invoice_requested($wc_order)
+    {
+        if (function_exists("webxl\archcommerce\orderprocess\archcommerce_" . __FUNCTION__)) {
+            return call_user_func("webxl\archcommerce\orderprocess\archcommerce_" . __FUNCTION__, $wc_order);
+        } else {
+            return false;
+        }
+    }
 }

@@ -27,7 +27,9 @@ class ArchOrderBuilderService
         $arch_customer["billing"] = $this->orderProcessService->process_customer_billing($wc_order);
         $arch_customer["shipping"] = $this->orderProcessService->process_customer_shipping($wc_order);
 
-        $result = array("order" => $arch_order, "customer" => $arch_customer);
+        $invoice_requested = $this->orderProcessService->invoice_requested($wc_order);
+
+        $result = array("order" => $arch_order, "customer" => $arch_customer, "invoice_requested" => $invoice_requested);
         return $result;
     }
 }
