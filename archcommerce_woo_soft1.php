@@ -63,7 +63,7 @@ if (!defined('ARCHCOMMERCE_SECRET_IV'))
     define('ARCHCOMMERCE_SECRET_IV', "VDrPxQbcHZyaYrPkcAT4BvLJzvtrS9d4");
 
 if (!defined('ARCHCOMMERCE_SERVICE_URL'))
-    define('ARCHCOMMERCE_SERVICE_URL', 'https://api.archcommerce.gr');
+    define('ARCHCOMMERCE_SERVICE_URL', 'https://archcommerce.local');
 
 if (!defined('ARCHCOMMERCE_API_VERSION'))
     define('ARCHCOMMERCE_API_VERSION', "1.1");
