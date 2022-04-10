@@ -21,7 +21,8 @@ class ProductsSyncProcessService
         SyncProductsSettingsOptionService $syncProductsSettingsOptionService,
         ProductsWpCronSchedulerService $productsWpCronSchedulerService,
         SubscriptionService $subscriptionService
-    ) {
+    )
+    {
         $this->archApiService = $archApiService;
         $this->tableService = $tableService;
         $this->wooCommerceService = $wooCommerceService;
@@ -32,29 +33,37 @@ class ProductsSyncProcessService
     }
     public function init_sync_process()
     {
-        try {
+        try
+        {
             if (
                 $this->subscriptionService->get_subscription_status() !== "active"
                 || $this->subscriptionService->is_sync_products_active() != true
             )
                 return;
 
-            if ($this->productsSyncProcessOptionService->is_status_ready_for_init()) {
+            if ($this->productsSyncProcessOptionService->is_status_ready_for_init())
+            {
                 $batch_size = $this->syncProductsSettingsOptionService->get_batch_size();
                 $this->productsSyncProcessOptionService->init_sync_process($batch_size);
-                $fetch_response = $this->archApiService->fetch_products($this->syncProductsSettingsOptionService->get_last_update_date());
+                $fetch_response = $this->archApiService->fetch_udpated_products_form_date($this->syncProductsSettingsOptionService->get_last_update_date());
                 $response_code = intval(wp_remote_retrieve_response_code($fetch_response));
-                switch ($response_code) {
+                switch ($response_code)
+                {
                     case 200:
                         $body = json_decode(wp_remote_retrieve_body($fetch_response));
-                        if (isset($body->success) && $body->success == true) {
+                        if (isset($body->success) && $body->success == true)
+                        {
                             $this->productsSyncProcessOptionService->complete_init_process(count($body->products), $batch_size);
                             $this->tableService->store_products($body->products, $this->syncProductsSettingsOptionService->get_storing_batch_size());
                             $this->productsWpCronSchedulerService->schedule_process_sync_process();
                             $this->productsSyncProcessOptionService->set_status_to_idle();
-                        } else if (isset($body->success) && $body->success == false) {
+                        }
+                        else if (isset($body->success) && $body->success == false)
+                        {
                             $this->productsSyncProcessOptionService->finish_init_process_with_error();
-                        } else {
+                        }
+                        else
+                        {
                             $this->productsSyncProcessOptionService->finish_init_process_with_error();
                             throw new \Exception("Couldn't fetch products from Soft1. Soft1 Response:" . print_r($fetch_response, true));
                         }
@@ -70,7 +79,9 @@ class ProductsSyncProcessService
                         break;
                 }
             }
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex)
+        {
             $this->productsSyncProcessOptionService->set_status_to_failed();
             error_log("Init sync process failed: " . $ex->getMessage());
         }
@@ -78,18 +89,23 @@ class ProductsSyncProcessService
 
     public function process_sync_process()
     {
-        try {
-            if ($this->productsSyncProcessOptionService->is_status_idle()) {
+        try
+        {
+            if ($this->productsSyncProcessOptionService->is_status_idle())
+            {
                 $offset = $this->productsSyncProcessOptionService->get_offset();
                 $total_products = $this->productsSyncProcessOptionService->get_total_products();
                 $batch_size = $this->productsSyncProcessOptionService->get_batch_size();
-                if ($offset >= $total_products) {
+                if ($offset >= $total_products)
+                {
                     //terminate asp
                     $this->productsSyncProcessOptionService->terminate_process();
                     $this->syncProductsSettingsOptionService->update_last_update_date();
                     $this->tableService->empty_table();
                     $this->productsWpCronSchedulerService->unschedule_process_sync_process();
-                } else {
+                }
+                else
+                {
                     //process asp
                     $this->productsSyncProcessOptionService->set_status_to_processing();
                     $arch_products = $this->tableService->get_products($offset, $batch_size);
@@ -99,7 +115,9 @@ class ProductsSyncProcessService
                     $this->productsSyncProcessOptionService->update_processed_process($updated);
                 }
             }
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex)
+        {
             $this->productsSyncProcessOptionService->set_status_to_failed();
             error_log("Process sync process failed: " . $ex->getMessage());
         }
