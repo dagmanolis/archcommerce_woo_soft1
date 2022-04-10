@@ -45,7 +45,7 @@ class ProductsSyncProcessService
             {
                 $batch_size = $this->syncProductsSettingsOptionService->get_batch_size();
                 $this->productsSyncProcessOptionService->init_sync_process($batch_size);
-                $fetch_response = $this->archApiService->fetch_products($this->syncProductsSettingsOptionService->get_last_update_date());
+                $fetch_response = $this->archApiService->fetch_udpated_products_form_date($this->syncProductsSettingsOptionService->get_last_update_date());
                 $response_code = intval(wp_remote_retrieve_response_code($fetch_response));
                 switch ($response_code)
                 {

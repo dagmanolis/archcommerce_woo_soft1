@@ -11,21 +11,16 @@ class ArchCommerceApiService
         EncryptService $encryptService,
         ArchCommerceRequestService $requestService,
         SettingsOptionService $settingsOptionService
-    ) {
+    )
+    {
         $this->encryptService = $encryptService;
         $this->requestService = $requestService;
         $this->settingsOptionService = $settingsOptionService;
     }
-    public function fetch_products(\DateTime $last_update_date = null)
+    public function fetch_udpated_products_form_date(\DateTime $last_update_date)
     {
-        if ($last_update_date)
-            $body = array(
-                "last_update_date" => $last_update_date->format("Y-m-d H:i:s")
-            );
-        else
-            $body = null;
-        $url = "/api/v" . ARCHCOMMERCE_API_VERSION . "/soft1/product";
-        return $this->requestService->send_request($url, $body);
+        $url = "/api/v" . ARCHCOMMERCE_API_VERSION . "/soft1/products/date/" . $last_update_date->format("Y-m-d-H-i-s");
+        return $this->requestService->send_request($url);
     }
     public function insert_order($order)
     {
