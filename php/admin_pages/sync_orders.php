@@ -1,7 +1,8 @@
 <?php
 global $archcommerce_syncOrdersProcessService;
 global $archcommerce_subscriptionService;
-if (isset($_REQUEST["init_orders_sync_process"])) {
+if (isset($_REQUEST["init_orders_sync_process"]))
+{
     $result = $archcommerce_syncOrdersProcessService->init_sync_process();
     if ($result === false)
         $result_html = sprintf('<p style="color:red;">%s</p>', __("An error occured", "archcommerce"));
@@ -9,15 +10,19 @@ if (isset($_REQUEST["init_orders_sync_process"])) {
         $result_html = sprintf('<p style="color:gray;">%s</p>', sprintf(__("Zero (0) orders inserted to Soft1", "archcommerce"), $result));
     else
         $result_html = sprintf('<p>%s</p>', sprintf(__("Inserted <strong>%s</strong> order(s) to Soft1", "archcommerce"), $result));
-} else {
+}
+else
+{
     $result_html = "";
 }
 
-if ($archcommerce_subscriptionService->is_insert_orders_active()) {
+if ($archcommerce_subscriptionService->is_insert_orders_active())
+{
     $order_statuses = wc_get_order_statuses();
     unset($order_statuses["wc-cancelled"]);
     unset($order_statuses["wc-refunded"]);
     unset($order_statuses["wc-failed"]);
+    unset($order_statuses["wc-completed"]);
 
     $order_wp_query_args = array(
         "post_type" => "shop_order",
