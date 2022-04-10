@@ -2,8 +2,8 @@
 Contributors: dagmanolis
 Tags: woocommerce, softone, wpml
 Requires at least: 5.6
-Tested up to: 5.6
-Stable tag: 2.7.0
+Tested up to: 5.9.3
+Stable tag: 2.8.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,10 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 
 
 == Changelog ==
+
+= 2.8.0 =
+2022/04/10
+* feature: ArchCommerce API v1.2
 
 = 2.7.0 =
 2022/03/18
