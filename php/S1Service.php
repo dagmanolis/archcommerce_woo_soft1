@@ -2,6 +2,44 @@
 
 namespace webxl\archcommerce\lrvl\S1Service;
 
+// archcommerce_user
+// fd52@3qjg
+// samarasbatteries
+
+/*
+
+appId
+soft1_time_bug_offset
+browser_list
+browser_filters
+browser_limit
+saldoc_series_code
+eshop_customer_trdr
+quantity_field
+shipping_expense_code
+cod_fee_expense_code
+browser_list_customer
+browser_filters_customer
+use_default_customer
+
+
+
+5000
+-3
+archcommerce_getproducts
+NULL
+1500
+6021
+7869
+QTY1
+104
+NULL
+NULL
+NULL
+1
+
+*/
+
 function GK_REQUEST()
 {
 }
