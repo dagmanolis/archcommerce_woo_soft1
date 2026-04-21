@@ -23,6 +23,7 @@ if ($archcommerce_subscriptionService->is_insert_orders_active())
     unset($order_statuses["wc-refunded"]);
     unset($order_statuses["wc-failed"]);
     unset($order_statuses["wc-completed"]);
+    unset($order_statuses["wc-pending"]);
 
     $order_wp_query_args = array(
         "post_type" => "shop_order",

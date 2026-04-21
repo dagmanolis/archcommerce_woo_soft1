@@ -13,7 +13,8 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
     public function __construct(
         ArchCommerceApiService $archCommerceApiService,
         ArchOrderBuilderService $archOrderBuilderService
-    ) {
+    )
+    {
         $this->archCommerceApiService = $archCommerceApiService;
         $this->archOrderBuilderService = $archOrderBuilderService;
     }
@@ -22,8 +23,10 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
     {
         $products_updated = 0;
 
-        foreach ($arch_products as $_arch_product) {
-            try {
+        foreach ($arch_products as $_arch_product)
+        {
+            try
+            {
                 $arch_product = json_decode($_arch_product);
 
                 if (!$arch_product)
@@ -33,11 +36,14 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
                     throw new \Exception("Product sku is empty");
 
                 $woo_product_id = wc_get_product_id_by_sku($arch_product->sku);
-                if ($woo_product_id > 0) {
+                if ($woo_product_id > 0)
+                {
                     $this->update_product($arch_product, $woo_product_id);
                     $products_updated += 1;
                 }
-            } catch (\Exception $ex) {
+            }
+            catch (\Exception $ex)
+            {
                 error_log("Failed to update woo product: " . $ex->getMessage());
             }
         }
@@ -46,26 +52,31 @@ abstract class WooCommerceServiceBase implements IWooCommerceService
     }
     public function on_woocommerce_thankyou($order_id)
     {
-        try {
+        try
+        {
             //check if order has been inserted
             if (!empty(get_post_meta($order_id, '_archcommerce_soft1_id', true)))
                 return;
             $arch_order = $this->archOrderBuilderService->create_arch_order($order_id);
             $response = $this->archCommerceApiService->insert_order($arch_order);
             $response_code = intval(wp_remote_retrieve_response_code($response));
-            if ($response_code === 200) {
-                $body = json_decode(wp_remote_retrieve_body($response));
-                if ($body->success) {
-                    $data = $body->data;
-                    add_post_meta($order_id, '_archcommerce_soft1_id', $data->soft1_order_id, true);
-                } else {
-                    throw new \Exception(print_r($response, true));
-                }
-            } else {
-                throw new \Exception(print_r($response, true));
+            $body = json_decode(wp_remote_retrieve_body($response));
+            $success = $response_code === 200 && $body && $body->success && $body->data && $body->data->soft1_order_id;
+
+            if ($success)
+            {
+                add_post_meta($order_id, '_archcommerce_soft1_id', $body->data->soft1_order_id, true);
             }
-        } catch (\Throwable $t) {
-            error_log("Error inserting order with id: " . $order_id . ". Error:"  . print_r($t, true));
+            else
+            {
+                add_post_meta($order_id, '_archcommerce_insert_order_attempts', 1, true);
+                $error = $body && $body->error ? $body->error : "n/a";
+                throw new \Exception($error);
+            }
+        }
+        catch (\Throwable $t)
+        {
+            error_log("Failed to insert order with id: " . $order_id . "\r\nError: "  . $t->getMessage());
         }
     }
 

@@ -23,11 +23,11 @@ jQuery(function ($) {
         });
     }
     var init_sync_process = function () {
-        disable_init_button();
-        if (!confirm(wpobj.areyousure_message)) {
-            enable_init_button();
+
+        if (!confirm(wpobj.areyousure_message))
             return;
-        }
+
+        disable_init_button();
 
         $.ajax({
             url: wpobj.ajaxurl,

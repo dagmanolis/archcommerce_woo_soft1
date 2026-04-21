@@ -3,7 +3,7 @@ Contributors: dagmanolis
 Tags: woocommerce, softone, wpml
 Requires at least: 5.6
 Tested up to: 5.9.3
-Stable tag: 2.8.0
+Stable tag: 2.9.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,10 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 
 
 == Changelog ==
+
+= 2.9.0 =
+2023/10/22
+* feature: 
 
 = 2.8.0 =
 2022/04/10
@@ -107,4 +111,3 @@ It matches woocommerce product SKU with any pre-selected field of SoftOne. Thus,
 * first stable version
 
 == Upgrade Notice ==
-
